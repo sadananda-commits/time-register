@@ -341,10 +341,17 @@ function checkSequence_(all, email, news, ignoreIds) {
 function status_(email) {
   const mine = events_().filter(e => e.email === email).sort(cmp_);
   const last = mine[mine.length - 1];
-  if (!last) return { state: 'none' };
+  if (!last) return { state: 'none', todayMs: 0 };
+  const today = ymd_(Date.now());
+  let todayMs = 0, open = null;
+  mine.forEach(e => {
+    if (e.type === 'Check In') open = e;
+    else if (open) { if (ymd_(open.t) === today) todayMs += e.t - open.t; open = null; }
+  });
   return {
     state: last.type === 'Check In' ? 'in' : 'out', lastType: last.type,
-    lastDate: Utilities.formatDate(new Date(last.t), TZ, 'dd/MM/yyyy'), lastTime: fmtTime_(new Date(last.t))
+    lastDate: Utilities.formatDate(new Date(last.t), TZ, 'dd/MM/yyyy'), lastTime: fmtTime_(new Date(last.t)),
+    sinceMs: last.t, todayMs: todayMs
   };
 }
 

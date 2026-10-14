@@ -1,0 +1,16 @@
+{
+  "name": "Time Register",
+  "short_name": "Time Register",
+  "description": "Check in, check out and track working hours.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b2545",
+  "theme_color": "#0b2545",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
