@@ -239,11 +239,22 @@ dialog::backdrop{background:rgba(8,14,26,.6)}
 .hchip.we{border-color:var(--out)}.hchip button{border:0;background:none;color:var(--muted);cursor:pointer;width:28px;height:28px;border-radius:50%}
 .hrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
 .hrow:first-child{border-top:0}.hrow b{color:var(--text)}
+
+.crow{display:grid;grid-template-columns:1fr 120px 1.1fr;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--line)}
+.crow .cd{font-weight:800}.crow .ca{text-align:right;font-weight:700}.crow input{min-height:44px;text-align:right}
+.csub{display:flex;justify-content:space-between;font-weight:800;padding-top:10px;border-top:2px solid var(--line);margin-top:4px}
+.ctotal{background:var(--hero);color:#fff;border-radius:20px;padding:16px 20px;box-shadow:var(--shadow)}
+.ctotal span{opacity:.88;font-size:.9rem;font-weight:600}.ctotal>b{display:block;font-size:2rem;letter-spacing:-.02em;font-weight:800}
+details.cl{background:var(--surface);border-radius:14px;box-shadow:var(--shadow);padding:0 14px;margin:8px 0}
+details.cl summary{display:flex;justify-content:space-between;gap:10px;cursor:pointer;padding:13px 0;color:var(--text)}
+.cl .ct{font-weight:800}.cbk{padding-bottom:12px}.cbk div{display:flex;justify-content:space-between;padding:3px 0;color:var(--muted)}
+.cbk .btn{margin-top:8px}
 </style>
 </head>
 <body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<symbol id="i-cash" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 10v.01M18 14v.01"/></symbol>
 <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M20 12V8a2 2 0 0 0-2-2H5a2 2 0 0 1 0-4h13"/><path d="M3 5v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4"/><path d="M21 12h-4a2 2 0 0 0 0 4h4z"/></symbol>
 <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
 <symbol id="i-login" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></symbol>
@@ -291,6 +302,7 @@ dialog::backdrop{background:rgba(8,14,26,.6)}
 
   <nav class="nav" role="tablist" aria-label="Sections">
     <button role="tab" id="tab1" aria-selected="true" aria-controls="p1"><svg class="ic"><use href="#i-clock"/></svg><span>Time Register</span></button>
+    <button role="tab" id="tab5" aria-selected="false" aria-controls="p5"><svg class="ic"><use href="#i-cash"/></svg><span>Cash Closure</span></button>
     <button role="tab" id="tab2" aria-selected="false" aria-controls="p2"><svg class="ic"><use href="#i-chart"/></svg><span>Working Hours</span></button>
     <button role="tab" id="tab3" aria-selected="false" aria-controls="p3" hidden><svg class="ic"><use href="#i-users"/></svg><span>Employees</span></button>
     <button id="tab4" type="button" hidden title="Open the Creditor Register" onclick="location.href='creditor/'"><svg class="ic"><use href="#i-wallet"/></svg><span>Creditor Register</span></button>
@@ -321,6 +333,29 @@ dialog::backdrop{background:rgba(8,14,26,.6)}
       </div>
       <button class="manualbtn" id="openManual"><svg class="ic"><use href="#i-pencil"/></svg>Manual entry / Edit time</button>
       <button class="manualbtn" id="openBulk"><svg class="ic"><use href="#i-calendar"/></svg>Enter several days at once</button>
+    </section>
+
+    <!-- Tab 5: Cash closure -->
+    <section id="p5" role="tabpanel" aria-labelledby="tab5" class="stack" hidden>
+      <div class="card">
+        <h2>Cash closure</h2>
+        <p class="note" style="margin:4px 0 12px">Count the cash in the till at closing time. Date and time default to now (Copenhagen); change them if you are recording an earlier closure.</p>
+        <div class="grid2"><label>Date <input type="date" id="cDate"></label><label>Time <input type="time" id="cTime"></label></div>
+      </div>
+      <div class="ctotal"><span>Closing cash balance</span><b id="cTotalTop">0,00 kr</b></div>
+      <div class="card">
+        <h2>Banknotes</h2><div id="cNotes"></div>
+        <div class="csub"><span>Notes total</span><span id="cSubNotes">0,00 kr</span></div>
+        <h2 style="margin-top:18px">Coins</h2><div id="cCoins"></div>
+        <div class="csub"><span>Coins total</span><span id="cSubCoins">0,00 kr</span></div>
+      </div>
+      <div class="ctotal"><span>Closing cash balance for <b id="cDay" style="display:inline;font-size:inherit">today</b></span><b id="cTotal">0,00 kr</b></div>
+      <div class="card">
+        <label>Notes (optional) <textarea id="cNotesTxt" rows="2" maxlength="500" placeholder="For example: 200 kr left in the till as change float"></textarea></label>
+        <div class="row-end" style="margin-top:12px"><button class="btn ghost" id="cClear">Clear</button><button class="btn" id="cSave">Save cash closure</button></div>
+      </div>
+      <h2 style="margin:6px 4px 0">Recent closures</h2>
+      <div id="cList" class="note">Loading…</div>
     </section>
 
     <!-- Tab 2 -->
@@ -547,10 +582,11 @@ async function loadTimeline(){
 
 /* ---- Tabs + menu ---- */
 function showTab(n){
-  [1,2,3].forEach(i=>{$('tab'+i).setAttribute('aria-selected',i===n);$('p'+i).hidden=i!==n});
+  [1,2,3,5].forEach(i=>{$('tab'+i).setAttribute('aria-selected',i===n);$('p'+i).hidden=i!==n});
   window.scrollTo(0,0);
   if(n===2&&!reportLoaded){setRange('month')}
   if(n===3) loadEmployees();
+  if(n===5) initCash();
 }
 function closeMenu(){$('menu').hidden=true;$('avatar').setAttribute('aria-expanded','false')}
 $('avatar').addEventListener('click',e=>{e.stopPropagation();const h=$('menu').hidden;$('menu').hidden=!h;$('avatar').setAttribute('aria-expanded',String(h))});
@@ -669,6 +705,72 @@ $('mDate').addEventListener('change',()=>{resetAdd();loadDay()});
 $('mEmp').addEventListener('change',loadDay);
 $('mCancel').addEventListener('click',()=>$('manual').close());
 $('mClose').addEventListener('click',()=>$('manual').close());
+
+/* ---- Cash closure ---- */
+// [label, kind, value in øre]  notes: 1000/500/200/100/50 kr  coins: 20/10/5/2/1 kr and 50 øre
+const DEN=[['1000 kr','note',100000],['500 kr','note',50000],['200 kr','note',20000],['100 kr','note',10000],['50 kr','note',5000],
+  ['20 kr','coin',2000],['10 kr','coin',1000],['5 kr','coin',500],['2 kr','coin',200],['1 kr','coin',100],['50 øre','coin',50]];
+const kr=o=>(o/100).toLocaleString('da-DK',{minimumFractionDigits:2,maximumFractionDigits:2})+' kr';
+let cTouched=false, cBuilt=false;
+function buildCash(){
+  const row=(d,i)=>'<div class="crow"><span class="cd">'+d[0]+'</span><input type="number" inputmode="numeric" min="0" step="1" placeholder="0" data-i="'+i+'" aria-label="Number of '+d[0]+(d[1]==='note'?' notes':' coins')+'"><span class="ca" id="ca'+i+'">0,00 kr</span></div>';
+  $('cNotes').innerHTML=DEN.map((d,i)=>d[1]==='note'?row(d,i):'').join('');
+  $('cCoins').innerHTML=DEN.map((d,i)=>d[1]==='coin'?row(d,i):'').join('');
+  cBuilt=true;
+}
+const cCounts=()=>DEN.map((d,i)=>{const v=Math.floor(Number(document.querySelector('#p5 input[data-i="'+i+'"]').value)||0);return Math.min(100000,Math.max(0,v))});
+function cNow(){
+  const p=parts(nowMs()); $('cDate').value=p.year+'-'+p.month+'-'+p.day; $('cTime').value=p.hour+':'+p.minute;
+}
+function updateCash(){
+  const c=cCounts(); let notes=0,coins=0;
+  c.forEach((n,i)=>{const v=n*DEN[i][2]; $('ca'+i).textContent=kr(v); if(DEN[i][1]==='note') notes+=v; else coins+=v});
+  $('cSubNotes').textContent=kr(notes); $('cSubCoins').textContent=kr(coins);
+  $('cTotal').textContent=kr(notes+coins); $('cTotalTop').textContent=kr(notes+coins);
+  const d=$('cDate').value; $('cDay').textContent=d?d.slice(8,10)+'/'+d.slice(5,7)+'/'+d.slice(0,4):'—';
+  return notes+coins;
+}
+function initCash(){
+  if(!cBuilt) buildCash();
+  if(!cTouched) cNow();
+  updateCash(); loadCash();
+}
+$('p5').addEventListener('input',e=>{
+  if(e.target.id==='cDate'||e.target.id==='cTime') cTouched=true;
+  if(e.target.matches('input,textarea')) updateCash();
+});
+$('cClear').addEventListener('click',()=>{
+  document.querySelectorAll('#p5 input[data-i]').forEach(i=>i.value=''); $('cNotesTxt').value=''; cTouched=false; cNow(); updateCash();
+});
+$('cSave').addEventListener('click',async()=>{
+  const total=updateCash();
+  if(!$('cDate').value||!$('cTime').value) return toast('Enter a date and a time.','err');
+  if(total<=0) return toast('Enter at least one note or coin.','err');
+  const d=$('cDate').value;
+  if(!confirm('Save a closing cash balance of '+kr(total)+' for '+d.slice(8,10)+'/'+d.slice(5,7)+'/'+d.slice(0,4)+' at '+$('cTime').value+'?')) return;
+  const btn=$('cSave'); btn.disabled=true;
+  try{
+    toast(await call('saveCash',{date:d,time:$('cTime').value,counts:cCounts(),notes:$('cNotesTxt').value}),'ok');
+    document.querySelectorAll('#p5 input[data-i]').forEach(i=>i.value=''); $('cNotesTxt').value=''; cTouched=false; cNow(); updateCash(); loadCash();
+  }catch(e){toast(e.message,'err')}
+  btn.disabled=false;
+});
+async function loadCash(){
+  const box=$('cList');
+  try{
+    const rows=await call('listCash',{from:addDays(todayYmd(),-90),to:todayYmd()});
+    if(!rows.length){box.textContent='No cash closures in the last 90 days.';return}
+    box.innerHTML=rows.map(r=>{
+      const lines=r.counts.map((n,i)=>n?'<div><span>'+DEN[i][0]+' × '+n+'</span><span>'+kr(n*DEN[i][2])+'</span></div>':'').join('');
+      return '<details class="cl"><summary><span><b>'+esc(r.date)+'</b> '+esc(r.time)+' · '+esc(r.by)+'</span><span class="ct">'+kr(r.totalOre)+'</span></summary>'+
+        '<div class="cbk">'+lines+(r.notes?'<div><span>Notes: '+esc(r.notes)+'</span></div>':'')+'<button class="btn danger sm" data-cv="'+esc(r.id)+'">Void this closure</button></div></details>'}).join('');
+  }catch(e){box.textContent=e.message}
+}
+$('cList').addEventListener('click',async e=>{
+  const b=e.target.closest('[data-cv]'); if(!b) return;
+  const reason=prompt('Reason for voiding this cash closure (required):'); if(!reason||!reason.trim()) return;
+  try{toast(await call('voidCash',{id:b.dataset.cv,reason}),'ok'); loadCash()}catch(err){toast(err.message,'err')}
+});
 
 /* ---- Several days at once ---- */
 const WD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -885,6 +987,7 @@ $('btnIn').addEventListener('click',()=>punch('Check In'));
 $('btnOut').addEventListener('click',()=>punch('Check Out'));
 $('openManual').addEventListener('click',()=>openManual(ME.email,todayYmd()));
 ['tab1','tab2','tab3'].forEach((id,i)=>$(id).addEventListener('click',()=>showTab(i+1)));
+$('tab5').addEventListener('click',()=>showTab(5));
 
 async function enter(){
   const d=await call('bootstrap');
