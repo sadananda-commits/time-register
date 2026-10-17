@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#4f46e5"><title>Creditor Register</title><link rel="icon" href="../icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--t:#16202e;--m:#64748b;--l:#e3e8f0;--p:#4f46e5;--p2:#7c3aed;--red:#e5484d;--grn:#16a34a;--sh:0 1px 2px #0f172a0d,0 6px 18px #0f172a10;--r:16px}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1320;--card:#182030;--t:#e7ecf5;--m:#94a3b8;--l:#2a364d;--p:#8b93ff;--p2:#a78bfa;--sh:0 1px 2px #0006}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}[hidden]{display:none!important}
+body{margin:0;font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;background:var(--bg);color:var(--t)}
+button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:10px 16px;min-height:44px;background:var(--p);color:#fff;font-weight:600}
+button:disabled{opacity:.5}button.alt{background:transparent;color:var(--p);border:1.5px solid var(--p)}
+button.sm{min-height:0;padding:3px 10px;font-size:12px;background:transparent;color:var(--red);border:1.5px solid var(--red);border-radius:8px}
+svg{flex:none}#nav{display:flex;align-items:center;gap:4px;background:var(--card);padding:8px 16px;box-shadow:var(--sh);position:sticky;top:0;z-index:5;overflow-x:auto}
+.brand{font-weight:800;color:var(--p);margin-right:12px;white-space:nowrap}.sp{flex:1}a.nv{text-decoration:none}
+.nv{background:none;color:var(--m);display:flex;align-items:center;gap:6px;padding:8px 12px;min-height:40px;white-space:nowrap}
+.nv.on{background:color-mix(in srgb,var(--p) 14%,transparent);color:var(--p)}#tabs{display:none}
+main{max-width:1060px;margin:auto;padding:18px 16px 40px}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px}.ph h1{margin:0;font-size:26px;line-height:1.2}.ph p{margin:2px 0 0;color:var(--m);font-size:14px}
+.help{width:38px;min-height:38px;padding:0;border-radius:50%;background:var(--card);color:var(--p);border:1.5px solid var(--l)}
+.hb{background:color-mix(in srgb,var(--p) 10%,var(--card));border-radius:var(--r);padding:12px 14px;margin-bottom:14px;font-size:14px}
+.hero{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;border-radius:20px;padding:20px;margin-bottom:14px;box-shadow:var(--sh)}
+.hero span{opacity:.85;font-size:14px}.hero b{display:block;font-size:34px;margin:2px 0;line-height:1.15}.hero small{opacity:.9}
+.qa{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.qa button{background:var(--card);color:var(--t);box-shadow:var(--sh);display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;font-size:13px}.qa svg{color:var(--p)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.card,.box{background:var(--card);border-radius:var(--r);padding:14px;box-shadow:var(--sh)}.box{padding:16px;margin-bottom:14px}
+.card span{color:var(--m);font-size:13px}.card b{display:block;font-size:20px}h3{margin:18px 0 8px}
+label{display:block;font-size:13px;font-weight:600;color:var(--m);margin:12px 0 4px}
+input,select,textarea{width:100%;padding:11px 12px;font:inherit;font-size:16px;border:1.5px solid var(--l);border-radius:12px;background:var(--card);color:var(--t);min-height:44px}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--p);outline-offset:1px}input[type=checkbox]{width:auto;min-height:0}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.bar>*{flex:1 1 140px;width:auto}.bar button{flex:0 0 auto}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 12px}.pick{display:flex;gap:8px}.pick button{white-space:nowrap}
+.sc{overflow-x:auto}table{border-collapse:collapse;width:100%;background:var(--card);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+th,td{padding:10px 12px;border-bottom:1px solid var(--l);text-align:left;white-space:nowrap}th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--m)}.n{text-align:right}
+.void{opacity:.5;text-decoration:line-through}.pill{padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;color:#fff}.pill.Credit{background:var(--red)}.pill.Repayment{background:var(--grn)}
+.cr{color:var(--red);font-weight:700}.rp{color:var(--grn);font-weight:700}.chip{padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700}
+.chip.owe{background:#e5484d22;color:var(--red)}.chip.ok{background:#16a34a22;color:var(--grn)}
+.av{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;font-weight:700;margin-right:10px;vertical-align:middle}
+.dl tbody tr{cursor:pointer}.dl tbody tr:hover{background:color-mix(in srgb,var(--p) 6%,var(--card))}
+details{background:var(--card);border-radius:12px;box-shadow:var(--sh);margin:6px 0;padding:6px 12px}details details{margin-left:8px}summary{cursor:pointer;padding:6px 0}
+#modal{position:fixed;inset:0;background:#0009;display:none;align-items:center;justify-content:center;z-index:20;padding:10px}
+#modal .box{width:100%;max-width:480px;max-height:90vh;overflow:auto;margin:0}
+.mi{display:flex;align-items:center;gap:12px;width:100%;margin:6px 0;justify-content:flex-start}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--grn);color:#fff;padding:12px 18px;border-radius:12px;display:none;z-index:30;max-width:92vw;box-shadow:var(--sh)}
+#toast.show{display:block}#toast.err{background:var(--red)}#load{position:fixed;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--p),var(--p2));display:none;z-index:40}
+#tip{position:fixed;display:none;background:#0f172a;color:#fff;padding:8px 11px;border-radius:10px;font-size:13px;max-width:240px;z-index:60;pointer-events:none;box-shadow:var(--sh)}
+.empty{padding:28px;text-align:center;color:var(--m)}a{color:var(--p)}
+.login{max-width:380px;margin:40px auto;text-align:center}.login h1{margin:8px 0 2px}.login .sub{color:var(--m);margin:0 0 6px}.login label{text-align:left}.login button.go{width:100%}
+.logo{width:56px;height:56px;border-radius:16px;margin:auto;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--p),var(--p2))}
+@media(max-width:760px){
+#nav{display:none}#tabs{display:flex;position:fixed;bottom:0;left:0;right:0;background:var(--card);box-shadow:0 -2px 14px #0f172a22;z-index:10;padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+#tabs button{flex:1;background:none;color:var(--m);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;padding:6px 0;min-height:52px}#tabs button.on{color:var(--p)}
+main{padding:14px 12px calc(92px + env(safe-area-inset-bottom))}.ph h1{font-size:22px}#toast{bottom:92px}.hero b{font-size:30px}
+#modal{align-items:flex-end;padding:0}#modal .box{border-radius:20px 20px 0 0;max-width:none;padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+form.box p>button{width:100%}.pick{flex-wrap:nowrap}
+.tl table,.tl tbody,.dl table,.dl tbody{display:block;background:none;box-shadow:none}.tl thead,.dl thead{display:none}
+.tl tr,.dl tr{display:grid;grid-template-columns:1fr auto;column-gap:10px;row-gap:2px;background:var(--card);border-radius:14px;box-shadow:var(--sh);padding:12px;margin:8px 0}
+.tl td,.dl td{border:0;padding:0;white-space:normal}td:empty{display:none}
+.tl .c-d{grid-column:1;grid-row:1;font-weight:700}.tl .c-cr,.tl .c-rp{grid-column:2;grid-row:1;font-size:17px;text-align:right}
+.tl .c-dt{grid-column:1;grid-row:2;color:var(--m);font-size:13px}.tl .c-ty{grid-column:2;grid-row:2;justify-self:end}
+.tl .c-ds{grid-column:1/-1;grid-row:3;color:var(--m);font-size:14px}.tl .c-b{grid-column:1;grid-row:4;font-size:13px;color:var(--m);text-align:left}.tl .c-b:not(.v)::before{content:"Balance after: "}
+.tl .c-by{display:none}.tl .c-ac{grid-column:2;grid-row:4;justify-self:end}
+.dl .c-d{grid-column:1;grid-row:1;display:flex;align-items:center;font-weight:700}.dl .c-ph{grid-column:1;grid-row:2;color:var(--m);font-size:13px;padding-left:44px}
+.dl .c-b{grid-column:2;grid-row:1/3;align-self:center}.dl .c-dt,.dl .c-ac{display:none}}
+</style></head><body>
+<div id="load"></div><nav id="nav" aria-label="Main"></nav><main id="main"></main><nav id="tabs" aria-label="Main tabs"></nav><div id="tip"></div>
+<div id="modal" role="dialog" aria-modal="true"></div><div id="toast" role="status"></div>
+<script src="config.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const NAV=[['dashboard','Dashboard','home','Overview: totals, outstanding debt and latest activity','Home'],['debtors','Debtors','users','Find, add and open customers who owe you money','Debtors'],['credit','Add Credit','plus','Record money or goods given on credit','Credit'],['repay','Record Repayment','check','Record a payment received from a customer','Repay'],['history','History','clock','All credits and payments by year, month and day','History'],['reports','Reports','chart','Balances, statements and monthly totals (CSV export)','Reports'],['settings','Settings','gear','Your password, currency and users','Settings']];
+const MON=['January','February','March','April','May','June','July','August','September','October','November','December'];
+let S={debtors:[],tx:[],settings:{Currency:'',TimeZone:'Europe/Copenhagen'},user:''},ST={},RB={},DN={},view='dashboard',cur=null,busy=0,TID='';
+let HF={debtor:'',type:'',from:'',to:'',q:'',sort:'date'},R={t:'outstanding',from:'',to:'',debtor:''},LAST=null;
+const fmt=m=>(m/100).toLocaleString('da-DK',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+(S.settings.Currency||'');
+const money=m=>esc(fmt(m));
+const toMinor=v=>{const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?0:Math.round(n*100)};
+const uid=()=>'T'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,8).toUpperCase();
+const nowL=()=>new Date().toLocaleString('sv-SE',{timeZone:S.settings.TimeZone}).replace(' ','T').slice(0,16);
+const dtv=id=>$('#'+id).value.replace('T',' ')+':00';
+function load(d){busy+=d?1:-1;$('#load').style.display=busy>0?'block':'none'}
+function toast(m,e){const t=$('#toast');t.textContent=m;t.className=e?'err show':'show';clearTimeout(toast.h);toast.h=setTimeout(()=>t.className='',4500)}
+const API_URL=window.CREDITOR_API||'';let TOKEN=localStorage.getItem('creditor_token')||'';
+async function run(fn,...a){load(1);try{const r=await fetch(API_URL,{method:'POST',body:JSON.stringify({action:fn,token:TOKEN,args:a})});const j=await r.json();load(0);
+ if(j.ok)return j.data;if(j.code==='AUTH'&&fn!=='login'){TOKEN='';localStorage.removeItem('creditor_token');showLogin()}toast(j.error||'Error',1);return null}catch(e){load(0);toast('Network error: '+e.message,1);return null}}
+function calc(){ST={};RB={};DN={};S.debtors.forEach(d=>{DN[d.DebtorID]=d.FullName;ST[d.DebtorID]={c:0,r:0,nc:0,nr:0}});
+ S.tx.filter(t=>t.Status!=='Voided').sort((a,b)=>(a.TransactionDateTime+a.CreatedAt).localeCompare(b.TransactionDateTime+b.CreatedAt)).forEach(t=>{
+ const s=ST[t.DebtorID]||(ST[t.DebtorID]={c:0,r:0,nc:0,nr:0});if(t.TransactionType==='Credit'){s.c+=t.CreditAmount;s.nc++}else{s.r+=t.RepaymentAmount;s.nr++}RB[t.TransactionID]=s.c-s.r})}
+const bal=id=>ST[id]?ST[id].c-ST[id].r:0;
+async function refresh(r=true){const d=await run('getData');if(d){S=d;calc()}if(r)render()}
+function go(v){view=v;render();scrollTo(0,0)}
+function openP(id){cur=id;go('profile')}
+function render(){if(!TOKEN)return showLogin();const act=view==='profile'?'debtors':view,T=['dashboard','debtors','credit','repay'];
+ $('#nav').innerHTML='<span class=brand>Creditor Register</span>'+NAV.map(n=>`<button class="nv ${act===n[0]?'on':''}" data-tip="${esc(n[3])}" onclick="go('${n[0]}')">${ICON[n[2]]}<span>${n[1]}</span></button>`).join('')+`<span class=sp></span><a class=nv href="../" data-tip="Back to Time Register">${ICON.clock}<span>Time Register</span></a><button class=nv data-tip="Sign out on this device" onclick=logout()>${ICON.out}<span>Log out</span></button>`;
+ $('#tabs').innerHTML=NAV.filter(n=>T.includes(n[0])).map(n=>`<button class="${act===n[0]?'on':''}" data-tip="${esc(n[3])}" onclick="go('${n[0]}')">${ICON[n[2]]}<span>${n[4]}</span></button>`).join('')+`<button class="${T.includes(act)?'':'on'}" data-tip="History, reports, settings and log out" onclick=moreMenu()>${ICON.more}<span>More</span></button>`;
+ let x=V[view]();if(view!=='settings')x=x.replace(/<h2>.*?<\/h2>/,'');$('#main').innerHTML=head()+x;if(I[view])I[view]()}
+const card=(l,v,t)=>`<div class=card${t?` data-tip="${esc(t)}"`:''}><span>${l}</span><b>${v}</b></div>`;
+const empty=m=>`<div class=empty>${m}</div>`;
+function txTable(l,showD=1){if(!l.length)return empty('No transactions yet.');
+ return `<div class="sc tl"><table><thead><tr><th>Date/time${showD?'<th>Debtor':''}<th>Type<th>Description<th class=n>Credit<th class=n>Repayment<th class=n>Balance after<th>By<th></tr></thead><tbody>`+
+ l.map(t=>{const v=t.Status==='Voided';return `<tr class="${v?'void':''}"><td class=c-dt>${esc(t.TransactionDateTime.slice(0,16))}${showD?`<td class=c-d><a href=# onclick="openP('${esc(t.DebtorID)}');return false">${esc(DN[t.DebtorID]||t.DebtorID)}</a>`:''}<td class=c-ty><span class="pill ${t.TransactionType}">${t.TransactionType}</span><td class=c-ds>${esc(t.Description||t.ReferenceNumber)}<td class="c-cr n cr">${t.CreditAmount?money(t.CreditAmount):''}<td class="c-rp n rp">${t.RepaymentAmount?money(t.RepaymentAmount):''}<td class="c-b n ${v?'v':''}">${v?'Voided':RB[t.TransactionID]!==undefined?money(RB[t.TransactionID]):''}<td class=c-by>${esc(t.RecordedBy)}<td class=c-ac>${v||S.role!=='admin'?'':`<button class=sm data-tip="Cancel this entry (a reason is required)" onclick="voidTx('${esc(t.TransactionID)}')">Void</button>`}`}).join('')+'</tbody></table></div>'}
+const byNew=l=>l.slice().sort((a,b)=>(b.TransactionDateTime+b.CreatedAt).localeCompare(a.TransactionDateTime+a.CreatedAt));
+async function voidTx(id){const r=prompt('Reason for voiding (required). The entry stays in the ledger but is excluded from totals.');if(!r||!r.trim())return;
+ if(await run('voidTransaction',id,r)){toast('Transaction voided');refresh()}}
+const dlOpts=()=>S.debtors.filter(d=>d.Status!=='Inactive').sort((a,b)=>a.FullName.localeCompare(b.FullName)).map(d=>`<option value="${esc(d.FullName)} · ${esc(d.DebtorID)}">`).join('');
+const label=id=>DN[id]+' · '+id;
+function pickHtml(id,lbl){return `<label for=${id}>${lbl}</label><div class=pick><input id=${id} list=dlist placeholder="Type name or ID" autocomplete=off><button type=button class=alt data-tip="Create a new debtor without leaving this form" onclick="debtorModal(null,'${id}')">+ New</button></div>`}
+function pickId(id){const v=$('#'+id).value.trim();const m=v.match(/· (D[0-9A-F]+)$/);if(m&&DN[m[1]])return m[1];
+ const f=S.debtors.filter(d=>d.DebtorID===v||d.FullName.toLowerCase()===v.toLowerCase());return f.length===1?f[0].DebtorID:''}
+const V={
+dashboard(){const ds=S.debtors,ids=ds.map(d=>d.DebtorID);const tc=ids.reduce((a,i)=>a+ST[i].c,0),tr=ids.reduce((a,i)=>a+ST[i].r,0);const out=ids.filter(i=>bal(i)>0).length;
+ return `<div class=hero><span>Total outstanding</span><b>${money(tc-tr)}</b><small>${out} of ${ds.length} debtors still owe money</small></div>
+ <div class=qa><button data-tip="Record money or goods given on credit" onclick="go('credit')">${ICON.plus}<span>Add credit</span></button><button data-tip="Record a payment received" onclick="go('repay')">${ICON.check}<span>Repayment</span></button><button data-tip="Register a new customer" onclick="debtorModal()">${ICON.users}<span>New debtor</span></button></div>
+ <div class=cards>${card('Credit issued',money(tc),'Everything given on credit so far')+card('Repaid',money(tr),'Everything received back')+card('Owing',out,'Debtors with a balance to pay')+card('Settled',ds.length-out,'Debtors with zero balance')}</div><h3>Recent activity</h3>${txTable(byNew(S.tx).slice(0,8))}`},
+debtors(){return `<h2>Debtors</h2><div class=bar><input id=q type=search placeholder="Search name, phone or ID" aria-label="Search debtors" oninput=dList()><button data-tip="Register a new customer" onclick="debtorModal()">+ Add debtor</button></div><div id=dl2></div>`},
+profile(){const d=S.debtors.filter(x=>x.DebtorID===cur)[0];if(!d)return empty('Debtor not found');const s=ST[cur];
+ return `<h2>${esc(d.FullName)}</h2><div class=bar><button data-tip="Give this debtor credit" onclick="go('credit');setTimeout(()=>pre('c_d'),0)">Add credit</button><button data-tip="Record a payment from this debtor" onclick="go('repay');setTimeout(()=>pre('r_d'),0)">Repayment</button><button class=alt data-tip="Change name, phone, address or notes" onclick="debtorModal('${cur}')">Edit</button><button class=alt data-tip="See every transaction, grouped by date" onclick="HF.debtor='${cur}';go('history')">History</button></div>
+ <div class=cards>${card('Credit received',money(s.c))+card('Repaid',money(s.r))+card('Outstanding',money(s.c-s.r))+card('Credit entries',s.nc)+card('Repayments',s.nr)}</div>
+ <div class=box><p><b>ID:</b> ${esc(d.DebtorID)} · <b>Phone:</b> ${esc(d.PhoneNumber)} · <b>Registered:</b> ${esc(d.CreatedAt)}</p><p><b>Address:</b> ${esc(d.Address)}</p><p><b>Added by:</b> ${esc(d.AddedBy)}</p><p><b>Notes:</b> ${esc(d.Notes)}</p></div>
+ <h3>Transactions</h3>${txTable(byNew(S.tx.filter(t=>t.DebtorID===cur)),0)}`},
+credit(){TID=TID||uid();return `<h2>Add Credit</h2><form class=box onsubmit="saveCredit();return false"><datalist id=dlist>${dlOpts()}</datalist>${pickHtml('c_d','Debtor *')}
+ <div class=row><div><label for=c_dt>Date and time</label><input id=c_dt type=datetime-local value="${nowL()}" required></div><div><label for=c_type>Type</label><select id=c_type onchange=cType()><option value=Money>Money credit</option><option value=Item>Item credit</option></select></div></div>
+ <label for=c_desc>Description / item details</label><input id=c_desc>
+ <div class=row id=itemF style="display:none"><div><label for=c_qty>Quantity</label><input id=c_qty type=number step=any min=0 oninput=calcAmt()></div><div><label for=c_unit>Unit price</label><input id=c_unit inputmode=decimal oninput=calcAmt()></div><div><label><input id=c_adj type=checkbox style="width:auto" onchange=calcAmt()> Manual total (explain in Notes)</label></div></div>
+ <div class=row><div><label for=c_amt>Amount *</label><input id=c_amt inputmode=decimal required></div><div><label for=c_by>Recorded by</label><input id=c_by value="${esc(S.user)}"></div></div>
+ <label for=c_notes>Notes</label><textarea id=c_notes rows=2></textarea><p><button id=c_save>Save credit</button></p></form>`},
+repay(){TID=TID||uid();return `<h2>Record Repayment</h2><form class=box onsubmit="saveRepay();return false"><datalist id=dlist>${dlOpts()}</datalist>${pickHtml('r_d','Debtor *')}<div class=cards id=r_info style="margin-top:10px"></div>
+ <div class=row><div><label for=r_dt>Date and time</label><input id=r_dt type=datetime-local value="${nowL()}" required></div><div><label for=r_amt>Repayment amount *</label><input id=r_amt inputmode=decimal required></div>
+ <div><label for=r_m>Payment method</label><select id=r_m><option>Cash</option><option>Card</option><option>Bank transfer</option><option>MobilePay</option><option>Other</option></select></div><div><label for=r_ref>Reference / receipt no.</label><input id=r_ref></div><div><label for=r_by>Recorded by</label><input id=r_by value="${esc(S.user)}"></div></div>
+ <label for=r_notes>Notes</label><textarea id=r_notes rows=2></textarea><p><button id=r_save>Save repayment</button></p></form>`},
+history(){return `<h2>Transaction History</h2><datalist id=dlist>${dlOpts()}</datalist><div class=bar><input id=h_d list=dlist placeholder="Debtor (all)" oninput=hist()><select id=h_t onchange=hist()><option value="">All types<option>Credit<option>Repayment</select><input id=h_f type=date onchange=hist() aria-label=From><input id=h_to type=date onchange=hist() aria-label=To><input id=h_q type=search placeholder="Search ID, name, description, reference" oninput=hist()><select id=h_s onchange=hist()><option value=date>Sort: date<option value=amount>Sort: amount<option value=debtor>Sort: debtor</select><button class=alt data-tip="Download these rows for Excel or Sheets" onclick=histCsv()>Export CSV</button></div><div id=h_out></div>`},
+reports(){return `<h2>Reports</h2><datalist id=dlist>${dlOpts()}</datalist><div class=bar><select id=p_t onchange=rep()><option value=outstanding>Debtors with outstanding balance<option value=zero>Debtors with zero balance<option value=period>Credit & repayments in period<option value=monthly>Activity by month<option value=range>Transactions in date range<option value=statement>Debtor statement</select><input id=p_d list=dlist placeholder="Debtor (statement)"><input id=p_f type=date aria-label=From><input id=p_to type=date aria-label=To><button onclick=rep()>Run</button><button class=alt data-tip="Download this report for Excel or Sheets" onclick=repCsv()>Export CSV</button></div><div id=p_out></div>`},
+settings(){const s=S.settings;return pwBox()+(S.role!=='admin'?'':`<h2>Settings</h2><form class=box onsubmit="saveSet();return false"><label for=s_c>Currency</label><input id=s_c value="${esc(s.Currency)}"><label for=s_z>Time zone</label><input id=s_z value="${esc(s.TimeZone)}"><label for=s_o>Allow overpayment</label><select id=s_o><option value=false ${s.AllowOverpayment!=='true'?'selected':''}>No<option value=true ${s.AllowOverpayment==='true'?'selected':''}>Yes (shows a credit balance)</select><p><button>Save settings</button></p></form><div id=u_out></div>`)}};
+const I={debtors(){dList()},history(){if(HF.debtor&&DN[HF.debtor])$('#h_d').value=label(HF.debtor);hist()},reports(){rep()},settings(){if(S.role==='admin')usersUI()},credit(){cType()},repay(){$('#r_d').addEventListener('input',rInfo);$('#r_amt').addEventListener('input',rInfo);rInfo()}};
+function pre(id){if(cur&&DN[cur]){$('#'+id).value=label(cur);if(id==='r_d')rInfo()}}
+function dList(){const q=($('#q').value||'').toLowerCase();const l=S.debtors.filter(d=>d.Status!=='Inactive'&&(d.FullName+' '+d.PhoneNumber+' '+d.DebtorID).toLowerCase().includes(q)).sort((a,b)=>a.FullName.localeCompare(b.FullName));
+ $('#dl2').innerHTML=l.length?`<div class="sc dl"><table><thead><tr><th>Name<th>Phone<th class=n>Outstanding<th>Registered<th></tr></thead><tbody>${l.map(d=>{const b=bal(d.DebtorID);return `<tr onclick="openP('${esc(d.DebtorID)}')"><td class=c-d><span class=av>${esc(d.FullName.trim().charAt(0).toUpperCase())}</span>${esc(d.FullName)}<td class=c-ph>${esc(d.PhoneNumber)}<td class="c-b n"><span class="chip ${b>0?'owe':'ok'}">${b>0?money(b):'Settled'}</span><td class=c-dt>${esc(d.CreatedAt.slice(0,10))}<td class=c-ac><button class=alt data-tip="Open this debtor's profile">Open</button>`}).join('')}</tbody></table></div>`:empty('No debtors found. Tap + Add debtor to create one.')}
+function debtorModal(id,target){const d=id?S.debtors.filter(x=>x.DebtorID===id)[0]:{};const m=$('#modal');
+ m.innerHTML=`<form class=box onsubmit="saveDebtor('${id||''}','${target||''}');return false"><h3>${id?'Edit':'New'} debtor</h3><label for=d_n>Full name *</label><input id=d_n required value="${esc(d.FullName)}"><label for=d_p>Phone</label><input id=d_p value="${esc(d.PhoneNumber)}"><label for=d_a>Address</label><input id=d_a value="${esc(d.Address)}">${id?'':`<label for=d_b>Added by</label><input id=d_b value="${esc(S.user)}">`}<label for=d_o>Notes</label><textarea id=d_o rows=3>${esc(d.Notes)}</textarea><p><button>Save</button> <button type=button class=alt onclick="closeM()">Cancel</button></p></form>`;m.style.display='flex';$('#d_n').focus()}
+const closeM=()=>$('#modal').style.display='none';
+async function saveDebtor(id,target,force){const d={FullName:$('#d_n').value,PhoneNumber:$('#d_p').value,Address:$('#d_a').value,Notes:$('#d_o').value,AddedBy:$('#d_b')?$('#d_b').value:'',force:force};
+ if(id){if(await run('updateDebtor',id,d)){closeM();toast('Debtor updated');refresh()}return}
+ const r=await run('addDebtor',d);if(!r)return;
+ if(r.duplicates){if(confirm('Similar debtor(s) already exist:\n'+r.duplicates.join('\n')+'\n\nIs this a different person?'))return saveDebtor(id,target,true);return}
+ closeM();toast('Debtor created');await refresh(!target);
+ if(target){$('#dlist').innerHTML=dlOpts();$('#'+target).value=label(r.debtor.DebtorID);$('#'+target).dispatchEvent(new Event('input'))}else openP(r.debtor.DebtorID)}
+function cType(){const it=$('#c_type').value==='Item';$('#itemF').style.display=it?'grid':'none';calcAmt()}
+function calcAmt(){if($('#c_type').value!=='Item')return;const a=$('#c_adj').checked;$('#c_amt').readOnly=!a;if(!a){const v=Math.round((parseFloat($('#c_qty').value)||0)*toMinor($('#c_unit').value));$('#c_amt').value=v?(v/100).toFixed(2):''}}
+async function saveCredit(){const d=pickId('c_d');if(!d)return toast('Select an existing debtor',1);const it=$('#c_type').value==='Item',amt=toMinor($('#c_amt').value);
+ if(amt<=0)return toast('Amount must be greater than zero',1);const adj=it&&$('#c_adj').checked;if(adj&&!$('#c_notes').value.trim())return toast('Explain the manual total in Notes',1);
+ if(!confirm(`Save credit of ${fmt(amt)} for ${DN[d]}?`))return;$('#c_save').disabled=true;
+ const r=await run('addTransaction',{TransactionID:TID,DebtorID:d,TransactionType:'Credit',TransactionDateTime:dtv('c_dt'),Description:$('#c_desc').value,Quantity:it?$('#c_qty').value:'',UnitPrice:it?toMinor($('#c_unit').value):'',CreditAmount:amt,RecordedBy:$('#c_by').value,Notes:$('#c_notes').value,adjusted:adj});
+ if(r){TID='';toast(r.duplicate?'Already saved':'Credit saved');refresh()}else $('#c_save').disabled=false}
+function rInfo(){const d=pickId('r_d'),o=$('#r_info');if(!d){o.innerHTML='';return}const s=ST[d],a=toMinor($('#r_amt').value);
+ o.innerHTML=card('Total credit',money(s.c))+card('Total repaid',money(s.r))+card('Outstanding',money(s.c-s.r))+(a?card('Balance after repayment',money(s.c-s.r-a)):'')}
+async function saveRepay(){const d=pickId('r_d');if(!d)return toast('Select an existing debtor',1);const a=toMinor($('#r_amt').value);if(a<=0)return toast('Amount must be greater than zero',1);
+ if(a>bal(d)&&S.settings.AllowOverpayment!=='true')return toast('Repayment exceeds the outstanding balance',1);
+ if(!confirm(`Save repayment of ${fmt(a)} from ${DN[d]}?`))return;$('#r_save').disabled=true;
+ const r=await run('addTransaction',{TransactionID:TID,DebtorID:d,TransactionType:'Repayment',TransactionDateTime:dtv('r_dt'),RepaymentAmount:a,PaymentMethod:$('#r_m').value,ReferenceNumber:$('#r_ref').value,Notes:$('#r_notes').value,RecordedBy:$('#r_by').value});
+ if(r){TID='';toast(r.duplicate?'Already saved':'Repayment saved');refresh()}else $('#r_save').disabled=false}
+function histList(){HF.debtor=pickId('h_d');const q=$('#h_q').value.toLowerCase(),ty=$('#h_t').value,f=$('#h_f').value,to=$('#h_to').value;
+ let l=S.tx.filter(t=>(!HF.debtor||t.DebtorID===HF.debtor)&&(!ty||t.TransactionType===ty)&&(!f||t.TransactionDateTime.slice(0,10)>=f)&&(!to||t.TransactionDateTime.slice(0,10)<=to)&&(!q||(t.TransactionID+' '+(DN[t.DebtorID]||'')+' '+t.Description+' '+t.ReferenceNumber).toLowerCase().includes(q)));
+ const s=$('#h_s').value;l=s==='amount'?l.sort((a,b)=>(b.CreditAmount+b.RepaymentAmount)-(a.CreditAmount+a.RepaymentAmount)):s==='debtor'?l.sort((a,b)=>(DN[a.DebtorID]||'').localeCompare(DN[b.DebtorID]||'')):byNew(l);return l}
+const sum=l=>{const v=l.filter(t=>t.Status!=='Voided');return `${l.length} txn · credit ${money(v.reduce((a,t)=>a+t.CreditAmount,0))} · repaid ${money(v.reduce((a,t)=>a+t.RepaymentAmount,0))}`};
+function hist(){const l=histList(),o=$('#h_out');if(!l.length){o.innerHTML=empty('No matching transactions.');return}
+ if($('#h_s').value!=='date'){o.innerHTML=txTable(l);return}
+ const g={};l.forEach(t=>{const y=t.TransactionDateTime.slice(0,4),m=t.TransactionDateTime.slice(5,7),d=t.TransactionDateTime.slice(8,10);((g[y]=g[y]||{})[m]=g[y][m]||{})[d]=(g[y][m][d]||[]).concat(t)});
+ const flat=o=>Object.values(o).flatMap(x=>Array.isArray(x)?x:flat(x));
+ o.innerHTML=Object.keys(g).sort().reverse().map(y=>`<details open><summary><b>${y}</b> — ${sum(flat(g[y]))}</summary>`+Object.keys(g[y]).sort().reverse().map(m=>`<details open><summary><b>${MON[+m-1]}</b> — ${sum(flat(g[y][m]))}</summary>`+Object.keys(g[y][m]).sort().reverse().map(d=>`<details><summary>${+d} ${MON[+m-1]} — ${sum(g[y][m][d])}</summary>${txTable(g[y][m][d])}</details>`).join('')+'</details>').join('')+'</details>').join('')}
+function histCsv(){const l=histList();csv('transactions.csv',['ID','Debtor','DateTime','Type','Description','Credit','Repayment','Balance after','Recorded by','Status'],l.map(t=>[t.TransactionID,DN[t.DebtorID]||'',t.TransactionDateTime,t.TransactionType,t.Description,(t.CreditAmount/100).toFixed(2),(t.RepaymentAmount/100).toFixed(2),RB[t.TransactionID]!==undefined?(RB[t.TransactionID]/100).toFixed(2):'',t.RecordedBy,t.Status]))}
+function rep(){const t=$('#p_t').value,f=$('#p_f').value,to=$('#p_to').value,m2=x=>(x/100).toFixed(2);const ok=x=>x.Status!=='Voided';
+ const inP=x=>(!f||x.TransactionDateTime.slice(0,10)>=f)&&(!to||x.TransactionDateTime.slice(0,10)<=to);let title,head,rows;
+ const ds=S.debtors.slice().sort((a,b)=>a.FullName.localeCompare(b.FullName));
+ if(t==='outstanding'||t==='zero'){const l=ds.filter(d=>t==='zero'?bal(d.DebtorID)===0:bal(d.DebtorID)>0);title=t==='zero'?'Debtors with zero balance':'Debtors with outstanding balance';head=['ID','Name','Phone','Credit','Repaid','Balance'];rows=l.map(d=>[d.DebtorID,d.FullName,d.PhoneNumber,m2(ST[d.DebtorID].c),m2(ST[d.DebtorID].r),m2(bal(d.DebtorID))]);rows.push(['','TOTAL','',m2(l.reduce((a,d)=>a+ST[d.DebtorID].c,0)),m2(l.reduce((a,d)=>a+ST[d.DebtorID].r,0)),m2(l.reduce((a,d)=>a+bal(d.DebtorID),0))])}
+ else if(t==='period'){const l=S.tx.filter(x=>ok(x)&&inP(x));title='Period totals';head=['Measure','Value'];rows=[['Credit issued',m2(l.reduce((a,x)=>a+x.CreditAmount,0))],['Repayments received',m2(l.reduce((a,x)=>a+x.RepaymentAmount,0))],['Transactions',l.length]]}
+ else if(t==='monthly'){const g={};S.tx.filter(x=>ok(x)&&inP(x)).forEach(x=>{const k=x.TransactionDateTime.slice(0,7);g[k]=g[k]||[0,0];g[k][0]+=x.CreditAmount;g[k][1]+=x.RepaymentAmount});title='Activity by month';head=['Month','Credit','Repayments','Net'];rows=Object.keys(g).sort().map(k=>[k,m2(g[k][0]),m2(g[k][1]),m2(g[k][0]-g[k][1])])}
+ else if(t==='range'){title='Transactions in range';head=['DateTime','Debtor','Type','Description','Credit','Repayment','Status'];rows=S.tx.filter(inP).sort((a,b)=>a.TransactionDateTime.localeCompare(b.TransactionDateTime)).map(x=>[x.TransactionDateTime,DN[x.DebtorID]||'',x.TransactionType,x.Description,m2(x.CreditAmount),m2(x.RepaymentAmount),x.Status])}
+ else{const d=pickId('p_d');if(!d){$('#p_out').innerHTML=empty('Select a debtor for the statement.');LAST=null;return}const all=S.tx.filter(x=>x.DebtorID===d&&ok(x)).sort((a,b)=>(a.TransactionDateTime+a.CreatedAt).localeCompare(b.TransactionDateTime+b.CreatedAt));
+ let run=0;all.filter(x=>f&&x.TransactionDateTime.slice(0,10)<f).forEach(x=>run+=x.CreditAmount-x.RepaymentAmount);title='Statement: '+DN[d]+(f||to?` (${f||'…'} to ${to||'…'})`:'');head=['DateTime','Description','Credit','Repayment','Running balance'];rows=[['','Opening balance','','',m2(run)]];
+ all.filter(inP).forEach(x=>{run+=x.CreditAmount-x.RepaymentAmount;rows.push([x.TransactionDateTime,x.Description||x.ReferenceNumber,m2(x.CreditAmount),m2(x.RepaymentAmount),m2(run)])});rows.push(['','Closing balance','','',m2(run)])}
+ LAST={title,head,rows};$('#p_out').innerHTML=`<h3>${esc(title)}</h3>`+(rows.length?`<div class=sc><table><thead><tr>${head.map(h=>'<th>'+esc(h)).join('')}</tr></thead><tbody>${rows.map(r=>'<tr>'+r.map(c=>'<td>'+esc(c)).join('')).join('')}</tbody></table></div>`:empty('No data for this report.'))}
+function repCsv(){if(LAST)csv('report.csv',LAST.head,LAST.rows);else toast('Run a report first',1)}
+function csv(name,head,rows){const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';const t='\ufeff'+[head].concat(rows).map(r=>r.map(q).join(';')).join('\n');
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download=name;document.body.appendChild(a);a.click();a.remove()}
+async function saveSet(){if(await run('updateSettings',{Currency:$('#s_c').value.trim(),TimeZone:$('#s_z').value.trim(),AllowOverpayment:$('#s_o').value})){toast('Settings saved');refresh()}}
+function showLogin(){$('#nav').innerHTML='';$('#tabs').innerHTML='';$('#main').innerHTML=`<form class="box login" onsubmit="doLogin();return false"><div class=logo>${ICON.users}</div><h1>Creditor Register</h1><p class=sub>Sign in to continue</p><label for=l_id>User ID</label><input id=l_id autocomplete=username autocapitalize=none required><label for=l_pw>Password</label><input id=l_pw type=password autocomplete=current-password required><label><input type=checkbox onchange="$('#l_pw').type=this.checked?'text':'password'"> Show password</label><p><button class=go id=l_b>Log in</button></p></form>`;$('#l_id').focus()}
+async function doLogin(){$('#l_b').disabled=true;const r=await run('login',$('#l_id').value,$('#l_pw').value);
+ if(r){TOKEN=r.token;localStorage.setItem('creditor_token',TOKEN);view='dashboard';await refresh()}else if($('#l_b')){$('#l_b').disabled=false;$('#l_pw').value=''}}
+async function logout(){await run('logout');TOKEN='';localStorage.removeItem('creditor_token');showLogin()}
+const boot=()=>!API_URL?($('#main').innerHTML='<div class=empty>Open creditor/config.js and paste your Creditor Register web app URL.</div>'):TOKEN?refresh():showLogin();
+const pwBox=()=>`<h2>Account</h2><form class=box onsubmit="chPw();return false"><p>Signed in as <b>${esc(S.user)}</b> (${esc(S.role)})</p><label for=pw_o>Current password</label><input id=pw_o type=password autocomplete=current-password required><label for=pw_n>New password (min. 8 characters)</label><input id=pw_n type=password autocomplete=new-password minlength=8 required><p><button>Change password</button></p></form>`;
+async function chPw(){if(await run('changePassword',$('#pw_o').value,$('#pw_n').value)){toast('Password changed');$('#pw_o').value=$('#pw_n').value=''}}
+async function usersUI(){const l=await run('listUsers');if(!l||!$('#u_out'))return;
+ $('#u_out').innerHTML=`<h2>Users</h2><div class=sc><table><thead><tr><th>User ID<th>Role<th>Active<th></tr></thead><tbody>${l.map(u=>`<tr><td>${esc(u.UserID)}<td>${esc(u.Role)}<td>${esc(u.Active)}<td><button class=alt onclick="resetPw('${esc(u.UserID)}')">Reset password</button> <button class=alt onclick="togUser('${esc(u.UserID)}','${u.Active==='Yes'?'No':'Yes'}')">${u.Active==='Yes'?'Deactivate':'Activate'}</button>`).join('')}</tbody></table></div><form class=box onsubmit="addU();return false"><h3>Add user</h3><div class=row><div><label for=u_i>User ID</label><input id=u_i required></div><div><label for=u_p>Initial password (min. 8)</label><input id=u_p type=password minlength=8 required autocomplete=new-password></div><div><label for=u_r>Role</label><select id=u_r><option>staff<option>admin</select></div></div><p><button>Add user</button></p></form>`}
+async function addU(){if(await run('addUser',$('#u_i').value,$('#u_p').value,$('#u_r').value)){toast('User added');usersUI()}}
+async function resetPw(id){const p=prompt('New password for '+id+' (min. 8 characters)');if(p&&await run('resetPassword',id,p))toast('Password reset')}
+async function togUser(id,a){if(await run('setUserActive',id,a)){toast('Updated');usersUI()}}
+const svg=p=>`<svg viewBox="0 0 24 24" width=22 height=22 fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round aria-hidden=true>${p}</svg>`;
+const ICON={home:svg('<path d="M3 11l9-8 9 8M5 10v10h14V10"/>'),users:svg('<circle cx=9 cy=8 r=3.5 /><path d="M2.5 20c0-4 3-6 6.5-6s6.5 2 6.5 6M16 4.5a3.5 3.5 0 010 7M18 14c2.5.5 3.5 2.5 3.5 6"/>'),plus:svg('<circle cx=12 cy=12 r=9 /><path d="M12 8v8M8 12h8"/>'),check:svg('<circle cx=12 cy=12 r=9 /><path d="M8 12.5l3 3 5-6"/>'),clock:svg('<circle cx=12 cy=12 r=9 /><path d="M12 7v5l3 2"/>'),chart:svg('<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'),gear:svg('<circle cx=12 cy=12 r=3 /><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>'),more:svg('<circle cx=5 cy=12 r=1.5 /><circle cx=12 cy=12 r=1.5 /><circle cx=19 cy=12 r=1.5 />'),out:svg('<path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/>')};
+const HELP={dashboard:['Dashboard','Your credit register at a glance','Shows how much customers owe in total, what was lent and what was repaid, plus the latest activity. Use the three shortcut buttons to add credit, record a payment or add a debtor.'],
+debtors:['Debtors','Search, add and open customers','Type a name, phone number or ID to filter the list. Tap a debtor to see their balance and history. Use + Add debtor to register a new customer.'],
+profile:['','Debtor profile','Shows what this debtor owes and every transaction. Use the buttons to add credit, record a repayment, edit details or open the full history.'],
+credit:['Add Credit','Record money or goods given on credit','1) Pick the debtor, or tap + New. 2) Check the date and time. 3) Enter the amount, or choose Item credit to enter quantity × price. 4) Save.'],
+repay:['Record Repayment','Record a payment received','Pick the debtor to see their balance. Enter the amount paid; the balance after the payment is shown before you save.'],
+history:['History','Every credit and repayment','Filter by debtor, type, dates or text. Tap a year, month or day to open it. Admins can void a wrong entry; voided entries stay visible but are not counted.'],
+reports:['Reports','Balances, statements and monthly totals','Choose a report, set dates if needed, tap Run, then Export CSV to open it in Excel or Sheets.'],
+settings:['Settings','Account and system settings','Change your password here. Admins can also set currency and time zone, allow overpayments and manage users.']};
+function head(){const H=HELP[view]||['','',''];let t=H[0];if(view==='profile'){const d=S.debtors.filter(x=>x.DebtorID===cur)[0];t=d?d.FullName:'Debtor'}
+ return `<div class=ph><div><h1>${esc(t)}</h1><p>${esc(H[1])}</p></div><button class=help data-tip="Show help for this page" aria-label="Help" onclick="$('#hb').hidden=!$('#hb').hidden">?</button></div><div class=hb id=hb hidden>${esc(H[2])}<br><small>Tip: press and hold any icon or button to see what it does.</small></div>`}
+function moreMenu(){const it=(v,l,i,t)=>`<button class="alt mi" data-tip="${t}" onclick="closeM();go('${v}')">${ICON[i]}<span>${l}</span></button>`;
+ $('#modal').innerHTML=`<div class=box><h3 style="margin-top:0">More</h3>${it('history','Transaction history','clock','All credits and payments')}${it('reports','Reports','chart','Statements, balances, CSV export')}${it('settings','Settings and account','gear','Password and admin settings')}<button class="alt mi" onclick="location.href='../'">${ICON.clock}<span>Time Register</span></button><button class="alt mi" onclick="closeM();logout()">${ICON.out}<span>Log out</span></button></div>`;$('#modal').style.display='flex'}
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeM()});
+const tipEl=$('#tip');let tt,held=0;
+function showTip(el){const t=el.dataset.tip;if(!t)return;tipEl.textContent=t;tipEl.style.display='block';const r=el.getBoundingClientRect(),w=tipEl.offsetWidth;tipEl.style.left=Math.min(Math.max(8,r.left+r.width/2-w/2),innerWidth-w-8)+'px';let y=r.top-tipEl.offsetHeight-8;if(y<8)y=r.bottom+8;tipEl.style.top=y+'px'}
+const hideTip=()=>tipEl.style.display='none';
+document.addEventListener('mouseover',e=>{const el=e.target.closest('[data-tip]');if(el&&matchMedia('(hover:hover)').matches)showTip(el)});
+document.addEventListener('mouseout',e=>{if(e.target.closest('[data-tip]'))hideTip()});
+document.addEventListener('touchstart',e=>{const el=e.target.closest('[data-tip]');clearTimeout(tt);if(el)tt=setTimeout(()=>{held=1;showTip(el);setTimeout(hideTip,2600)},450)},{passive:true});
+['touchend','touchmove','touchcancel'].forEach(ev=>document.addEventListener(ev,()=>clearTimeout(tt),{passive:true}));
+document.addEventListener('click',e=>{if(held){held=0;e.preventDefault();e.stopPropagation()}else hideTip()},true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
+boot();
+</script></body></html>
