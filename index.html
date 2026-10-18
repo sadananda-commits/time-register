@@ -249,6 +249,21 @@ details.cl{background:var(--surface);border-radius:14px;box-shadow:var(--shadow)
 details.cl summary{display:flex;justify-content:space-between;gap:10px;cursor:pointer;padding:13px 0;color:var(--text)}
 .cl .ct{font-weight:800}.cbk{padding-bottom:12px}.cbk div{display:flex;justify-content:space-between;padding:3px 0;color:var(--muted)}
 .cbk .btn{margin-top:8px}
+
+.wd{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--surface2);color:var(--muted);font-size:.74rem;font-weight:800;vertical-align:middle}
+.wd.we{color:var(--out)}
+.cal{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:10px;margin:6px 0 10px}
+.calh{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}.calh b{font-size:1.05rem}
+.calh button{width:42px;height:42px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface2);color:var(--text);font-size:1.3rem;cursor:pointer}
+.calg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.calg .wdh{text-align:center;font-size:.72rem;font-weight:800;color:var(--muted);padding:4px 0}
+.calg button{aspect-ratio:1;min-height:40px;padding:0;border:1.5px solid transparent;border-radius:12px;background:none;font:inherit;font-weight:700;color:var(--text);position:relative;cursor:pointer}
+.calg button.we{color:var(--out)}.calg button.today{border-color:var(--brand)}
+.calg button.sel{background:var(--brand);border-color:var(--brand);color:#fff}
+.calg button:disabled{opacity:.28;cursor:not-allowed}
+.calg button.hd::after{content:"";position:absolute;bottom:4px;left:50%;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:#7c4dbd}
+.calleg{margin:0 0 6px;font-size:.82rem}
+details.rng{margin:6px 0 10px;padding:6px 12px;background:var(--surface);border-radius:12px;box-shadow:var(--shadow)}details.rng summary{cursor:pointer;font-weight:700;padding:6px 0}
 </style>
 </head>
 <body>
@@ -444,13 +459,17 @@ details.cl summary{display:flex;justify-content:space-between;gap:10px;cursor:po
 <dialog id="bulk" aria-labelledby="bTitle">
   <div class="dlg">
     <div class="dhead"><h2 id="bTitle">Enter several days at once</h2><button class="x" id="bClose" aria-label="Close"><svg class="ic"><use href="#i-x"/></svg></button></div>
-    <p class="note">1) Pick the dates. 2) Set the start and end time. 3) Tap Fill table, then change any day that differs. Times are Copenhagen time.</p>
+    <p class="note">1) Tap the days on the calendar. 2) Set the start and end time once. 3) Change any day in the table that differs. Times are Copenhagen time.</p>
     <label id="bEmpWrap" hidden>Employee <select id="bEmp"></select></label>
-    <div class="grid2"><label>From <input type="date" id="bFrom"></label><label>To <input type="date" id="bTo"></label></div>
-    <div class="grid2"><label>Start time <input type="time" id="bStart" value="08:00"></label><label>End time <input type="time" id="bEnd" value="16:00"></label></div>
-    <div class="opts"><label><input type="checkbox" id="bWeekdays" checked> Weekdays only (Mon–Fri)</label><label><input type="checkbox" id="bSkipHol" checked> Skip holidays</label></div>
-    <div class="row-end"><button class="btn" id="bBuild">Fill table</button><button class="btn ghost" id="bApply">Same times for all rows</button></div>
-    <div class="grid2"><label>Add one more date <input type="date" id="bOne"></label><button class="btn ghost" id="bAdd" style="align-self:end">Add date</button></div>
+    <div class="cal" id="cal" aria-label="Calendar"></div>
+    <p class="note calleg">Tap a day to select it, tap again to remove it. Purple dot = holiday. Future days cannot be selected.</p>
+    <div class="grid2"><label>Start time (all days) <input type="time" id="bStart" value="08:00"></label><label>End time (all days) <input type="time" id="bEnd" value="16:00"></label></div>
+    <details class="rng"><summary>Or add a whole date range</summary>
+      <div class="grid2"><label>From <input type="date" id="bFrom"></label><label>To <input type="date" id="bTo"></label></div>
+      <div class="opts"><label><input type="checkbox" id="bWeekdays" checked> Weekdays only (Mon–Fri)</label><label><input type="checkbox" id="bSkipHol" checked> Skip holidays</label></div>
+      <div class="row-end"><button class="btn" id="bBuild">Add range to table</button></div>
+    </details>
+    <div class="row-end"><button class="btn ghost" id="bClear">Clear all days</button><button class="btn ghost" id="bApply">Same times for all rows</button></div>
     <div id="bTable" class="scroll"></div>
     <p class="note" id="bSum"></p>
     <div class="opts"><label><input type="checkbox" id="bSkipEx" checked> Skip days that already have entries</label></div>
@@ -633,7 +652,7 @@ function renderTable(){
       const b=s.outTime?('Out '+esc(s.outTime)):(s.k==='live'?'Still working':'<b>Missing check-out</b>');
       return '<div class="sess"><span>'+a+'</span><span>'+b+'</span><span>'+(s.hours?esc(s.hours):'')+'</span></div>';
     }).join('');
-    return '<tr class="row" tabindex="0" data-i="'+i+'"><td class="c-date">'+esc(d.date)+(d.manual?'<span class="chip m">Manual</span>':'')+(d.holiday?'<span class="chip h">'+esc(d.holiday)+'</span>':'')+'</td><td class="c-emp">'+esc(d.name)+'</td><td class="c-in">'+esc(d.checkIn)+'</td><td class="c-out">'+esc(d.checkOut)+'</td><td class="c-hrs">'+esc(d.hours)+'</td><td class="c-status"><span class="badge '+cls+'">'+icon(bi)+esc(d.status)+'</span></td></tr>'+
+    return '<tr class="row" tabindex="0" data-i="'+i+'"><td class="c-date">'+esc(d.date)+dayTag(d.ymd)+(d.manual?'<span class="chip m">Manual</span>':'')+(d.holiday?'<span class="chip h">'+esc(d.holiday)+'</span>':'')+'</td><td class="c-emp">'+esc(d.name)+'</td><td class="c-in">'+esc(d.checkIn)+'</td><td class="c-out">'+esc(d.checkOut)+'</td><td class="c-hrs">'+esc(d.hours)+'</td><td class="c-status"><span class="badge '+cls+'">'+icon(bi)+esc(d.status)+'</span></td></tr>'+
       '<tr class="detail" id="det'+i+'" hidden><td colspan="6">'+sess+(d.holiday&&!d.sessions.length?'<div class="note" style="margin-bottom:8px">Holiday: '+esc(d.holiday)+'</div>':'')+'<button class="btn ghost sm" data-edit="'+i+'">'+icon('pencil')+(d.holiday&&!d.sessions.length?'Add entries for this day':'Edit entries for this day')+'</button>'+(d.holiday&&ME.admin?'<button class="btn danger sm" data-remh="'+i+'">'+icon('x')+'Remove holiday</button>':'')+'</td></tr>';
   }).join('');
 }
@@ -727,7 +746,7 @@ function updateCash(){
   c.forEach((n,i)=>{const v=n*DEN[i][2]; $('ca'+i).textContent=kr(v); if(DEN[i][1]==='note') notes+=v; else coins+=v});
   $('cSubNotes').textContent=kr(notes); $('cSubCoins').textContent=kr(coins);
   $('cTotal').textContent=kr(notes+coins); $('cTotalTop').textContent=kr(notes+coins);
-  const d=$('cDate').value; $('cDay').textContent=d?d.slice(8,10)+'/'+d.slice(5,7)+'/'+d.slice(0,4):'—';
+  const d=$('cDate').value; $('cDay').textContent=d?d.slice(8,10)+'/'+d.slice(5,7)+'/'+d.slice(0,4)+' ('+WD[wdOf(d)]+')':'—';
   return notes+coins;
 }
 function initCash(){
@@ -762,7 +781,7 @@ async function loadCash(){
     if(!rows.length){box.textContent='No cash closures in the last 90 days.';return}
     box.innerHTML=rows.map(r=>{
       const lines=r.counts.map((n,i)=>n?'<div><span>'+DEN[i][0]+' × '+n+'</span><span>'+kr(n*DEN[i][2])+'</span></div>':'').join('');
-      return '<details class="cl"><summary><span><b>'+esc(r.date)+'</b> '+esc(r.time)+' · '+esc(r.by)+'</span><span class="ct">'+kr(r.totalOre)+'</span></summary>'+
+      return '<details class="cl"><summary><span><b>'+esc(r.date)+'</b>'+dayTag(r.ymd)+' '+esc(r.time)+' · '+esc(r.by)+'</span><span class="ct">'+kr(r.totalOre)+'</span></summary>'+
         '<div class="cbk">'+lines+(r.notes?'<div><span>Notes: '+esc(r.notes)+'</span></div>':'')+'<button class="btn danger sm" data-cv="'+esc(r.id)+'">Void this closure</button></div></details>'}).join('');
   }catch(e){box.textContent=e.message}
 }
@@ -775,22 +794,26 @@ $('cList').addEventListener('click',async e=>{
 /* ---- Several days at once ---- */
 const WD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const wdOf=ymd=>{const a=ymd.split('-').map(Number);return new Date(Date.UTC(a[0],a[1]-1,a[2])).getUTCDay()};
+const dayTag=ymd=>{const w=wdOf(ymd);return '<span class="wd'+(w===0||w===6?' we':'')+'">'+WD[w]+'</span>'};
 const dmyOf=ymd=>ymd.slice(8,10)+'/'+ymd.slice(5,7)+'/'+ymd.slice(0,4);
 function rangeDates(f,t){const out=[];let d=f;while(d<=t&&out.length<400){out.push(d);d=addDays(d,1)}return out}
 const mins=t=>{const a=String(t||'').split(':');return a.length===2?Number(a[0])*60+Number(a[1]):NaN};
 const hrsTxt=(s,e)=>{const m=mins(e)-mins(s);return isFinite(m)&&m>0?Math.floor(m/60)+'h '+pad(m%60)+'m':'—'};
-let bRows=[];
+let bRows=[], calM='', calHol={};
+const MONN=['January','February','March','April','May','June','July','August','September','October','November','December'];
 function openBulk(){
   $('bEmpWrap').hidden=!ME.admin; $('bEmp').value=ME.email;
-  const t=todayYmd(); $('bFrom').value=t; $('bTo').value=t; $('bReason').value=''; $('bOne').value='';
-  bRows=[]; renderB(); $('bulk').showModal();
+  const t=todayYmd(); $('bFrom').value=t; $('bTo').value=t; $('bReason').value='';
+  calM=t.slice(0,8)+'01'; calHol={};
+  bRows=[]; renderB(); $('bulk').showModal(); loadCalHol();
 }
 function renderB(){
   const box=$('bTable');
-  if(!bRows.length){box.innerHTML='<div class="empty">No days yet.<br>Choose the dates above and tap “Fill table”.</div>';$('bSum').textContent='';return}
+  renderCal();
+  if(!bRows.length){box.innerHTML='<div class="empty">No days yet.<br>Tap days on the calendar above.</div>';$('bSum').textContent='';return}
   box.innerHTML='<div class="brow head"><span>Date</span><span>Start</span><span>End</span><span style="text-align:right">Hours</span><span></span></div>'+
     bRows.map((r,i)=>{const w=wdOf(r.ymd);
-      return '<div class="brow'+(w===0||w===6?' we':'')+'" data-i="'+i+'"><span class="b-d">'+dmyOf(r.ymd)+'<small>'+WD[w]+'</small></span>'+
+      return '<div class="brow'+(w===0||w===6?' we':'')+'" data-i="'+i+'"><span class="b-d">'+dmyOf(r.ymd)+dayTag(r.ymd)+'</span>'+
         '<input class="b-s" type="time" value="'+esc(r.s)+'" aria-label="Start time '+dmyOf(r.ymd)+'"><input class="b-e" type="time" value="'+esc(r.e)+'" aria-label="End time '+dmyOf(r.ymd)+'">'+
         '<span class="b-h">'+hrsTxt(r.s,r.e)+'</span><button class="x b-x" data-rm="'+i+'" aria-label="Remove '+dmyOf(r.ymd)+'">'+icon('x')+'</button></div>'}).join('');
   updB();
@@ -801,7 +824,7 @@ function updB(){
 }
 $('bTable').addEventListener('input',e=>{
   const row=e.target.closest('.brow'); if(!row||!e.target.matches('input')) return;
-  const r=bRows[row.dataset.i]; if(e.target.classList.contains('b-s')) r.s=e.target.value; else r.e=e.target.value;
+  const r=bRows[row.dataset.i]; r.m=true; if(e.target.classList.contains('b-s')) r.s=e.target.value; else r.e=e.target.value;
   row.querySelector('.b-h').textContent=hrsTxt(r.s,r.e); updB();
 });
 $('bTable').addEventListener('click',e=>{const b=e.target.closest('[data-rm]'); if(b){bRows.splice(Number(b.dataset.rm),1);renderB()}});
@@ -809,6 +832,7 @@ $('bBuild').addEventListener('click',async()=>{
   const f=$('bFrom').value,t=$('bTo').value;
   if(!f||!t) return toast('Choose a From and a To date.','err');
   if(f>t) return toast('The From date must be on or before the To date.','err');
+  if(t>todayYmd()) return toast('The To date cannot be in the future.','err');
   const btn=$('bBuild'); btn.disabled=true;
   try{
     let skipSet={}, skippedHol=0;
@@ -816,29 +840,67 @@ $('bBuild').addEventListener('click',async()=>{
       const emp=$('bEmp').value||ME.email;
       (await call('listHolidays',{from:f,to:t})).forEach(h=>{if(h.scope==='all'||h.scope===emp) skipSet[h.ymd]=1});
     }
-    const rows=[];
+    const have={}; bRows.forEach(r=>have[r.ymd]=1);
+    let added=0;
     rangeDates(f,t).forEach(d=>{
       const w=wdOf(d);
       if($('bWeekdays').checked&&(w===0||w===6)) return;
       if(skipSet[d]){skippedHol++;return}
-      rows.push({ymd:d,s:$('bStart').value,e:$('bEnd').value});
+      if(have[d]) return;
+      bRows.push({ymd:d,s:$('bStart').value,e:$('bEnd').value,m:false}); added++;
     });
-    if(rows.length>62) return toast('That is '+rows.length+' days. Please choose up to 62 days at a time.','err');
-    bRows=rows; renderB();
-    if(!rows.length) toast('No days left in that range after the filters.','err');
-    else if(skippedHol) toast('Skipped '+skippedHol+(skippedHol===1?' holiday.':' holidays.'),'ok');
+    bRows.sort((a,b)=>a.ymd<b.ymd?-1:1);
+    if(bRows.length>62){bRows=bRows.slice(0,62); toast('Only 62 days can be saved at a time, the rest were left out.','err')}
+    renderB();
+    if(!added) toast('No new days in that range.','err');
+    else if(skippedHol) toast('Added '+added+', skipped '+skippedHol+(skippedHol===1?' holiday.':' holidays.'),'ok');
   }catch(e){toast(e.message,'err')}
   btn.disabled=false;
 });
 $('bApply').addEventListener('click',()=>{
   if(!$('bStart').value||!$('bEnd').value) return toast('Set a start and an end time first.','err');
-  bRows.forEach(r=>{r.s=$('bStart').value;r.e=$('bEnd').value}); renderB();
+  bRows.forEach(r=>{r.s=$('bStart').value;r.e=$('bEnd').value;r.m=false}); renderB();
 });
-$('bAdd').addEventListener('click',()=>{
-  const d=$('bOne').value; if(!d) return toast('Choose a date to add.','err');
-  if(bRows.some(r=>r.ymd===d)) return toast('That date is already in the table.','err');
-  if(bRows.length>=62) return toast('You can save up to 62 days at a time.','err');
-  bRows.push({ymd:d,s:$('bStart').value,e:$('bEnd').value}); bRows.sort((a,b)=>a.ymd<b.ymd?-1:1); renderB(); $('bOne').value='';
+$('bClear').addEventListener('click',()=>{bRows=[];renderB()});
+['bStart','bEnd'].forEach(id=>$(id).addEventListener('change',()=>{
+  bRows.forEach(r=>{if(!r.m){r.s=$('bStart').value;r.e=$('bEnd').value}}); if(bRows.length) renderB();
+}));
+$('bEmp').addEventListener('change',loadCalHol);
+function renderCal(){
+  const y=+calM.slice(0,4), mo=+calM.slice(5,7), lead=(wdOf(calM)+6)%7, last=new Date(Date.UTC(y,mo,0)).getUTCDate(), today=todayYmd(), sel={};
+  bRows.forEach(r=>sel[r.ymd]=1);
+  let h='<div class="calh"><button type="button" data-cm="-1" aria-label="Previous month">‹</button><b>'+MONN[mo-1]+' '+y+'</b><button type="button" data-cm="1" aria-label="Next month">›</button></div><div class="calg">'+
+    ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>'<span class="wdh">'+x+'</span>').join('');
+  for(let i=0;i<lead;i++) h+='<span></span>';
+  for(let d=1;d<=last;d++){
+    const ymd=calM.slice(0,8)+pad(d), w=wdOf(ymd);
+    h+='<button type="button" data-d="'+ymd+'" class="'+(sel[ymd]?'sel ':'')+(ymd===today?'today ':'')+(w===0||w===6?'we ':'')+(calHol[ymd]?'hd':'')+'"'+(ymd>today?' disabled':'')+
+      ' aria-pressed="'+(sel[ymd]?'true':'false')+'" aria-label="'+WD[w]+' '+dmyOf(ymd)+(calHol[ymd]?', holiday: '+esc(calHol[ymd]):'')+'">'+d+'</button>';
+  }
+  $('cal').innerHTML=h+'</div>';
+}
+async function loadCalHol(){
+  const m=calM, last=new Date(Date.UTC(+m.slice(0,4),+m.slice(5,7),0)).getUTCDate();
+  try{
+    const list=await call('listHolidays',{from:m,to:m.slice(0,8)+pad(last)}), emp=$('bEmp').value||ME.email, map={};
+    list.forEach(h=>{if(h.scope==='all'||h.scope===emp) map[h.ymd]=h.label});
+    if(m===calM){calHol=map; renderCal()}
+  }catch(e){}
+}
+$('cal').addEventListener('click',e=>{
+  const n=e.target.closest('[data-cm]');
+  if(n){
+    const dt=new Date(Date.UTC(+calM.slice(0,4),+calM.slice(5,7)-1+Number(n.dataset.cm),1));
+    calM=dt.getUTCFullYear()+'-'+pad(dt.getUTCMonth()+1)+'-01'; calHol={}; renderCal(); loadCalHol(); return;
+  }
+  const b=e.target.closest('[data-d]'); if(!b||b.disabled) return;
+  const ymd=b.dataset.d, i=bRows.findIndex(r=>r.ymd===ymd);
+  if(i>=0) bRows.splice(i,1);
+  else{
+    if(bRows.length>=62) return toast('You can save up to 62 days at a time.','err');
+    bRows.push({ymd:ymd,s:$('bStart').value,e:$('bEnd').value,m:false}); bRows.sort((a,b)=>a.ymd<b.ymd?-1:1);
+  }
+  renderB();
 });
 $('bSave').addEventListener('click',async()=>{
   if(!bRows.length) return toast('Add at least one day.','err');
@@ -868,7 +930,7 @@ function openHol(){
 function renderH(){
   $('hCount').textContent=hDays.length?'('+hDays.length+')':'';
   $('hChips').innerHTML=hDays.length?hDays.map((d,i)=>{const w=wdOf(d);
-    return '<span class="hchip'+(w===0||w===6?' we':'')+'">'+WD[w]+' '+d.slice(8,10)+'/'+d.slice(5,7)+'/'+d.slice(2,4)+'<button data-rmh="'+i+'" aria-label="Remove '+dmyOf(d)+'">'+icon('x')+'</button></span>'}).join(''):
+    return '<span class="hchip'+(w===0||w===6?' we':'')+'">'+d.slice(8,10)+'/'+d.slice(5,7)+'/'+d.slice(2,4)+dayTag(d)+'<button data-rmh="'+i+'" aria-label="Remove '+dmyOf(d)+'">'+icon('x')+'</button></span>'}).join(''):
     '<span class="note">Nothing selected yet. Tap “Select days”.</span>';
 }
 async function loadHolList(){
@@ -879,7 +941,7 @@ async function loadHolList(){
     const rows=await call('listHolidays',{from:f,to:t});
     if(!rows.length){box.textContent='No holidays marked in this range.';return}
     box.innerHTML=rows.map(h=>{const w=wdOf(h.ymd);
-      return '<div class="hrow"><span><b>'+WD[w]+' '+esc(h.date)+'</b> · '+esc(h.label)+' · '+esc(h.scopeName)+'</span><button class="btn danger sm" data-rid="'+esc(h.id)+'">Remove</button></div>'}).join('');
+      return '<div class="hrow"><span><b>'+esc(h.date)+'</b>'+dayTag(h.ymd)+' · '+esc(h.label)+' · '+esc(h.scopeName)+'</span><button class="btn danger sm" data-rid="'+esc(h.id)+'">Remove</button></div>'}).join('');
   }catch(e){box.textContent=e.message}
 }
 $('hBuild').addEventListener('click',()=>{
