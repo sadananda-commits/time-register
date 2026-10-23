@@ -66,6 +66,7 @@ main{max-width:1000px;margin:0 auto;padding:4px 16px calc(110px + env(safe-area-
 .nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;border:0;background:none;color:var(--muted);
   font-size:.74rem;font-weight:700;padding:8px 4px;border-radius:12px;cursor:pointer;min-height:54px}
 .nav button[aria-selected="true"]{color:var(--brand);background:var(--brand-soft)}
+@media (max-width:640px){.nav{gap:2px;padding-left:4px;padding-right:4px}.nav button{flex:1 1 0;min-width:0;padding:8px 2px;font-size:.66rem;line-height:1.15;text-align:center}}
 @media (min-width:800px){
   main{padding-bottom:48px}
   .nav{position:static;max-width:1000px;margin:0 auto 12px;padding:0 16px;background:none;border:0;justify-content:flex-start;gap:8px}
@@ -264,6 +265,31 @@ details.cl summary{display:flex;justify-content:space-between;gap:10px;cursor:po
 .calg button.hd::after{content:"";position:absolute;bottom:4px;left:50%;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:#7c4dbd}
 .calleg{margin:0 0 6px;font-size:.82rem}
 details.rng{margin:6px 0 10px;padding:6px 12px;background:var(--surface);border-radius:12px;box-shadow:var(--shadow)}details.rng summary{cursor:pointer;font-weight:700;padding:6px 0}
+
+.seg{display:flex;background:var(--surface2);border-radius:14px;padding:4px;gap:4px}
+.seg button{flex:1;border:0;border-radius:11px;padding:10px;min-height:44px;font:inherit;font-weight:800;background:none;color:var(--muted);cursor:pointer}
+.seg button.on{background:var(--brand);color:#fff}
+.calbar{display:flex;align-items:center;gap:10px;background:var(--hero);color:#fff;border-radius:20px;padding:10px 12px;box-shadow:var(--shadow)}
+.calbar button{width:44px;height:44px;border-radius:50%;border:0;background:#ffffff2e;color:#fff;font-size:1.5rem;cursor:pointer;flex:none}
+.calbar .ttl{flex:1;text-align:center}.calbar .ttl b{display:block;font-size:1.1rem}.calbar small{opacity:.88}
+.mg{display:grid;grid-template-columns:34px repeat(7,1fr);gap:3px;background:var(--surface);border-radius:18px;padding:10px;box-shadow:var(--shadow)}
+.mg .h{font-size:.7rem;font-weight:800;color:var(--muted);text-align:center;padding:4px 0}
+.mg .wk{border:0;border-radius:8px;background:var(--surface2);color:var(--muted);font:inherit;font-size:.72rem;font-weight:800;cursor:pointer}
+.mg .d{position:relative;min-height:54px;border:1.5px solid transparent;border-radius:12px;background:none;font:inherit;font-weight:700;color:var(--text);padding:5px 0 14px;cursor:pointer;display:flex;flex-direction:column;align-items:center}
+.mg .d.out{opacity:.4}.mg .d.we{color:var(--out)}.mg .d.today{border-color:var(--brand)}
+.mg .hrs{font-size:.62rem;color:var(--muted);font-weight:700}.mg .dots{position:absolute;bottom:5px;display:flex;gap:3px}
+.sdot{width:7px;height:7px;border-radius:50%;display:inline-block}.sdot.p{background:var(--brand)}.sdot.r{background:var(--in)}.sdot.h{background:#7c4dbd}
+.wrow{display:grid;grid-template-columns:62px 1fr;gap:10px;background:var(--surface);border-radius:16px;box-shadow:var(--shadow);padding:10px;margin:8px 0;cursor:pointer}
+.wrow.today{outline:2px solid var(--brand)}.wl{text-align:center;color:var(--muted);font-weight:800}.wl b{display:block;font-size:1.5rem;color:var(--text)}.wrow.we .wl span{color:var(--out)}
+.ecard{--c:#64748b;border-left:5px solid var(--c);background:color-mix(in srgb,var(--c) 14%,var(--surface));border-radius:10px;padding:7px 10px;margin-bottom:6px;font-size:.9rem}
+.ecard b{display:block}.ecard.hol{--c:#7c4dbd}
+.ecard.reg,.blk.r{--c:var(--in);background:repeating-linear-gradient(135deg,#0000 0 8px,#00000010 8px 16px),color-mix(in srgb,var(--c) 14%,var(--surface))}
+.tw{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);max-height:64vh;overflow:auto}
+.tg{position:relative;height:1152px}.tg .hl{position:absolute;left:0;right:0;height:48px;border-top:1px solid var(--line);cursor:pointer}
+.tg .hl span{position:absolute;left:8px;top:2px;font-size:.72rem;color:var(--muted);font-weight:700}
+.blk{--c:#64748b;position:absolute;border-left:5px solid var(--c);background:color-mix(in srgb,var(--c) 18%,var(--surface));border-radius:10px;padding:3px 8px;font-size:.8rem;overflow:hidden;box-shadow:0 1px 3px #0002;color:var(--text)}
+.blk.p{left:56px;right:38%;cursor:pointer}.blk.r{left:calc(62% + 4px);right:6px}.blk.ov{outline:2px dashed var(--out)}
+.nowl{position:absolute;left:48px;right:0;height:2px;background:var(--out);z-index:2}
 </style>
 </head>
 <body>
@@ -318,6 +344,7 @@ details.rng{margin:6px 0 10px;padding:6px 12px;background:var(--surface);border-
   <nav class="nav" role="tablist" aria-label="Sections">
     <button role="tab" id="tab1" aria-selected="true" aria-controls="p1"><svg class="ic"><use href="#i-clock"/></svg><span>Time Register</span></button>
     <button role="tab" id="tab5" aria-selected="false" aria-controls="p5"><svg class="ic"><use href="#i-cash"/></svg><span>Cash Closure</span></button>
+    <button role="tab" id="tab6" aria-selected="false" aria-controls="p6"><svg class="ic"><use href="#i-calendar"/></svg><span>Upcoming Schedule</span></button>
     <button role="tab" id="tab2" aria-selected="false" aria-controls="p2"><svg class="ic"><use href="#i-chart"/></svg><span>Working Hours</span></button>
     <button role="tab" id="tab3" aria-selected="false" aria-controls="p3" hidden><svg class="ic"><use href="#i-users"/></svg><span>Employees</span></button>
     <button id="tab4" type="button" hidden title="Open the Creditor Register" onclick="location.href='creditor/'"><svg class="ic"><use href="#i-wallet"/></svg><span>Creditor Register</span></button>
@@ -371,6 +398,17 @@ details.rng{margin:6px 0 10px;padding:6px 12px;background:var(--surface);border-
       </div>
       <h2 style="margin:6px 4px 0">Recent closures</h2>
       <div id="cList" class="note">Loading…</div>
+    </section>
+
+    <!-- Tab 6: Upcoming schedule -->
+    <section id="p6" role="tabpanel" aria-labelledby="tab6" class="stack" hidden>
+      <div class="card">
+        <div class="seg" aria-label="Calendar view"><button data-v="month">Month</button><button data-v="week">Week</button><button data-v="day">Day</button></div>
+        <label id="sEmpWrap" hidden style="margin-top:10px">Employee <select id="sEmp"></select></label>
+      </div>
+      <div class="calbar"><button id="sPrev" aria-label="Previous" data-tip="Previous">‹</button><div class="ttl"><b id="sTitle"></b><small id="sSub"></small></div><button id="sNext" aria-label="Next">›</button></div>
+      <div id="sBody"></div>
+      <div class="row-end"><button class="btn ghost" id="sToday">Today</button><button class="btn" id="sAdd">+ Add hours</button></div>
     </section>
 
     <!-- Tab 2 -->
@@ -452,6 +490,20 @@ details.rng{margin:6px 0 10px;padding:6px 12px;background:var(--surface);border-
       <button class="btn ghost" id="mCancel">Close</button>
       <button class="btn" id="mSave">Save entries</button>
     </div>
+  </div>
+</dialog>
+
+<!-- Schedule entry -->
+<dialog id="sch" aria-labelledby="seTitle">
+  <div class="dlg">
+    <div class="dhead"><h2 id="seTitle">Add hours</h2><button class="x" id="seClose" aria-label="Close"><svg class="ic"><use href="#i-x"/></svg></button></div>
+    <label>Date <input type="date" id="seDate"></label>
+    <div class="grid2"><label>Start <input type="time" id="seStart"></label><label>End <input type="time" id="seEnd"></label></div>
+    <label>Task <select id="seTask"></select></label>
+    <label id="seNewWrap" hidden>New task name <input id="seNew" maxlength="60" placeholder="For example: Evening cleaning"></label>
+    <label>Notes (optional) <textarea id="seNotes" rows="2" maxlength="300"></textarea></label>
+    <p class="note" id="seInfo"></p>
+    <div class="row-end"><button class="btn danger" id="seDel" hidden>Delete</button><button class="btn ghost" id="seReg" hidden data-tip="Creates real Check In / Check Out entries in Working Hours">Register as worked time</button><button class="btn" id="seSave">Save</button></div>
   </div>
 </dialog>
 
@@ -601,11 +653,12 @@ async function loadTimeline(){
 
 /* ---- Tabs + menu ---- */
 function showTab(n){
-  [1,2,3,5].forEach(i=>{$('tab'+i).setAttribute('aria-selected',i===n);$('p'+i).hidden=i!==n});
+  [1,2,3,5,6].forEach(i=>{$('tab'+i).setAttribute('aria-selected',i===n);$('p'+i).hidden=i!==n});
   window.scrollTo(0,0);
   if(n===2&&!reportLoaded){setRange('month')}
   if(n===3) loadEmployees();
   if(n===5) initCash();
+  if(n===6) initSch();
 }
 function closeMenu(){$('menu').hidden=true;$('avatar').setAttribute('aria-expanded','false')}
 $('avatar').addEventListener('click',e=>{e.stopPropagation();const h=$('menu').hidden;$('menu').hidden=!h;$('avatar').setAttribute('aria-expanded',String(h))});
@@ -724,6 +777,147 @@ $('mDate').addEventListener('change',()=>{resetAdd();loadDay()});
 $('mEmp').addEventListener('change',loadDay);
 $('mCancel').addEventListener('click',()=>$('manual').close());
 $('mClose').addEventListener('click',()=>$('manual').close());
+
+/* ---- Upcoming schedule ---- */
+const SCOL=['#0f766e','#2563eb','#c026d3','#ea580c','#ca8a04','#0891b2','#65a30d','#dc2626'];
+const WDL=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+// ISO 8601 week number (weeks start on Monday, week 1 contains 4 January)
+const isoWeek=ymd=>{const a=ymd.split('-').map(Number),d=new Date(Date.UTC(a[0],a[1]-1,a[2]));d.setUTCDate(d.getUTCDate()+3-((d.getUTCDay()+6)%7));
+  const w1=new Date(Date.UTC(d.getUTCFullYear(),0,4));return 1+Math.round(((d-w1)/864e5-3+((w1.getUTCDay()+6)%7))/7)};
+const monOf=ymd=>addDays(ymd,-((wdOf(ymd)+6)%7));
+const durTxt=m=>Math.floor(m/60)+'h '+pad(m%60)+'m';
+const hm2=m=>pad(Math.floor(m/60))+':'+pad(m%60);
+let SC={view:'month',cur:'',email:'',entries:[],hols:{},reg:{},tasks:[]}, seId='';
+const tcol=id=>{const t=SC.tasks.find(x=>x.id===id);return t?SCOL[t.color%SCOL.length]:'#64748b'};
+const tname=id=>{const t=SC.tasks.find(x=>x.id===id);return t?t.name:'No task'};
+const schEmail=()=>ME.admin?(SC.email||ME.email):ME.email;
+function schRange(){
+  if(SC.view==='month'){const last=new Date(Date.UTC(+SC.cur.slice(0,4),+SC.cur.slice(5,7),0)).getUTCDate();
+    return [monOf(SC.cur.slice(0,8)+'01'),addDays(monOf(SC.cur.slice(0,8)+pad(last)),6)]}
+  const m=monOf(SC.cur); return [m,addDays(m,6)];
+}
+function initSch(){
+  if(!SC.cur){SC.cur=todayYmd(); SC.email=ME.email}
+  if(ME.admin) $('sEmp').value=SC.email;
+  loadSch();
+}
+async function loadSch(){
+  const [from,to]=schRange(), email=schEmail();
+  try{
+    const [sc,rp,tk]=await Promise.all([call('schedule',{from,to,email}),call('report',{from,to,email}),call('listTasks',{})]);
+    SC.entries=sc.entries; SC.hols={}; sc.holidays.forEach(h=>SC.hols[h.ymd]=h.label);
+    SC.reg={}; rp.days.forEach(d=>{if(d.sessions&&d.sessions.length) SC.reg[d.ymd]=d.sessions}); SC.tasks=tk;
+    renderSch();
+  }catch(e){toast(e.message,'err')}
+}
+function entriesOn(d){return SC.entries.filter(e=>e.ymd===d&&e.status!=='Deleted').sort((a,b)=>mins(a.start)-mins(b.start))}
+function regOn(d){
+  return (SC.reg[d]||[]).map(s=>{const a=mins(s.inTime);let b=mins(s.outTime);
+    if(!isFinite(b)&&d===todayYmd()){const p=parts(nowMs());b=Number(p.hour)*60+Number(p.minute)}
+    return isFinite(a)&&isFinite(b)&&b>a?{a:a,b:b}:null}).filter(Boolean);
+}
+function renderSch(){
+  document.querySelectorAll('#p6 .seg button').forEach(b=>b.classList.toggle('on',b.dataset.v===SC.view));
+  const c=SC.cur,v=SC.view,B=$('sBody');
+  if(v==='month'){$('sTitle').textContent=MONN[+c.slice(5,7)-1]+' '+c.slice(0,4);$('sSub').textContent='Tap a day to plan its hours';B.innerHTML=monthHtml()}
+  else if(v==='week'){const m=monOf(c),e=addDays(m,6);$('sTitle').textContent='Week '+isoWeek(m);
+    $('sSub').textContent=dmyOf(m).slice(0,5)+' – '+dmyOf(e);B.innerHTML=weekHtml(m)}
+  else{$('sTitle').textContent=WDL[wdOf(c)]+' '+(+c.slice(8))+' '+MONN[+c.slice(5,7)-1]+' '+c.slice(0,4);$('sSub').textContent='Week '+isoWeek(c);B.innerHTML=dayHtml();
+    const f=entriesOn(c)[0],tw=$('tw'); tw.scrollTop=Math.max(0,(f?mins(f.start):7*60)*0.8-24)}
+}
+function monthHtml(){
+  const [f,t]=schRange(),today=todayYmd(),mo=SC.cur.slice(0,7);
+  let h='<div class="mg"><span class="h">Wk</span>'+['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>'<span class="h">'+x+'</span>').join('');
+  for(let d=f;d<=t;d=addDays(d,1)){
+    const w=wdOf(d);
+    if(w===1) h+='<button class="wk" data-w="'+d+'" aria-label="Week '+isoWeek(d)+'" data-tip="Open week '+isoWeek(d)+'">'+isoWeek(d)+'</button>';
+    const en=entriesOn(d),tot=en.reduce((s,e)=>s+mins(e.end)-mins(e.start),0);
+    h+='<button class="d'+(d.slice(0,7)!==mo?' out':'')+(w===0||w===6?' we':'')+(d===today?' today':'')+'" data-d="'+d+'" aria-label="'+WD[w]+' '+dmyOf(d)+'">'+(+d.slice(8))+
+      (tot?'<span class="hrs">'+Math.round(tot/6)/10+'h</span>':'')+'<span class="dots">'+(en.length?'<i class="sdot p"></i>':'')+(SC.reg[d]?'<i class="sdot r"></i>':'')+(SC.hols[d]?'<i class="sdot h"></i>':'')+'</span></button>';
+  }
+  return h+'</div><p class="note"><i class="sdot p"></i> planned &nbsp; <i class="sdot r"></i> registered time &nbsp; <i class="sdot h"></i> holiday</p>';
+}
+function weekHtml(m){
+  let h='',today=todayYmd();
+  for(let i=0;i<7;i++){
+    const d=addDays(m,i),w=wdOf(d),en=entriesOn(d),rg=regOn(d);
+    let cards=en.map(e=>'<div class="ecard" style="--c:'+tcol(e.taskId)+'"><b>'+e.start+'–'+e.end+(e.status==='Registered'?' ✓':'')+'</b>'+esc(tname(e.taskId))+'</div>').join('');
+    if(rg.length) cards+='<div class="ecard reg"><b>Registered</b>'+rg.map(r=>hm2(r.a)+'–'+hm2(r.b)).join(', ')+'</div>';
+    if(SC.hols[d]) cards+='<div class="ecard hol"><b>Holiday</b>'+esc(SC.hols[d])+'</div>';
+    h+='<div class="wrow'+(d===today?' today':'')+(w===0||w===6?' we':'')+'" data-d="'+d+'"><div class="wl"><span>'+WD[w]+'</span><b>'+(+d.slice(8))+'</b></div><div>'+(cards||'<span class="note">Nothing planned</span>')+'</div></div>';
+  }
+  return h;
+}
+function dayHtml(){
+  const d=SC.cur,en=entriesOn(d),rg=regOn(d),today=todayYmd();
+  const pl=en.reduce((s,e)=>s+mins(e.end)-mins(e.start),0),rt=rg.reduce((s,r)=>s+r.b-r.a,0);
+  let h=SC.hols[d]?'<div class="ecard hol"><b>Holiday</b>'+esc(SC.hols[d])+'</div>':'';
+  h+='<p class="note"><b>Planned</b> '+durTxt(pl)+' · <b>Registered</b> '+durTxt(rt)+' · solid = planned, striped = registered. Tap an hour to add hours, tap a block to edit.</p><div class="tw" id="tw"><div class="tg">';
+  for(let i=0;i<24;i++) h+='<div class="hl" data-h="'+i+'" style="top:'+i*48+'px"><span>'+pad(i)+':00</span></div>';
+  let ov=false;
+  en.forEach(e=>{const a=mins(e.start),b=mins(e.end),over=rg.some(r=>r.a<b&&r.b>a); if(over) ov=true;
+    h+='<div class="blk p'+(over?' ov':'')+'" data-e="'+esc(e.id)+'" style="--c:'+tcol(e.taskId)+';top:'+a*0.8+'px;height:'+Math.max(24,(b-a)*0.8)+'px"><b>'+e.start+'–'+e.end+'</b> '+esc(tname(e.taskId))+(e.status==='Registered'?' ✓':'')+'</div>'});
+  rg.forEach(r=>{h+='<div class="blk r" style="top:'+r.a*0.8+'px;height:'+Math.max(24,(r.b-r.a)*0.8)+'px" data-tip="Registered in Time Register"><b>'+hm2(r.a)+'–'+hm2(r.b)+'</b></div>'});
+  if(d===today){const p=parts(nowMs());h+='<div class="nowl" style="top:'+(Number(p.hour)*60+Number(p.minute))*0.8+'px"></div>'}
+  h+='</div></div>';
+  if(ov) h+='<p class="note" style="color:var(--out)">⚠ Dashed blocks overlap time that is already registered.</p>';
+  return h;
+}
+function shiftSch(n){
+  const c=SC.cur;
+  if(SC.view==='month'){const dt=new Date(Date.UTC(+c.slice(0,4),+c.slice(5,7)-1+n,1));SC.cur=dt.getUTCFullYear()+'-'+pad(dt.getUTCMonth()+1)+'-01'}
+  else SC.cur=addDays(c,(SC.view==='week'?7:1)*n);
+  loadSch();
+}
+$('sPrev').addEventListener('click',()=>shiftSch(-1)); $('sNext').addEventListener('click',()=>shiftSch(1));
+$('sToday').addEventListener('click',()=>{SC.cur=todayYmd();loadSch()});
+$('sEmp').addEventListener('change',()=>{SC.email=$('sEmp').value;loadSch()});
+$('sAdd').addEventListener('click',()=>openEntry(null,{start:'09:00',end:'10:00'}));
+$('p6').addEventListener('click',e=>{
+  const sv=e.target.closest('.seg button'); if(sv){SC.view=sv.dataset.v;loadSch();return}
+  const w=e.target.closest('[data-w]'); if(w){SC.cur=w.dataset.w;SC.view='week';loadSch();return}
+  const be=e.target.closest('[data-e]'); if(be){openEntry(SC.entries.find(x=>x.id===be.dataset.e));return}
+  const dd=e.target.closest('[data-d]'); if(dd){SC.cur=dd.dataset.d;SC.view='day';loadSch();return}
+  const hl=e.target.closest('.hl'); if(hl&&!e.target.closest('.blk')){const h=Number(hl.dataset.h);openEntry(null,{start:pad(h)+':00',end:h>=23?'23:59':pad(h+1)+':00'})}
+});
+function fillTaskSel(sel){
+  $('seTask').innerHTML='<option value="">No task</option>'+SC.tasks.map(t=>'<option value="'+esc(t.id)+'">'+esc(t.name)+'</option>').join('')+'<option value="__new">+ New task…</option>';
+  $('seTask').value=sel||''; $('seNewWrap').hidden=true;
+}
+function openEntry(e,def){
+  seId=e?e.id:''; const locked=!!(e&&e.status==='Registered');
+  $('seTitle').textContent=locked?'Registered entry':e?'Edit hours':'Add hours';
+  $('seDate').value=e?e.ymd:(SC.view==='month'?todayYmd():SC.cur); $('seStart').value=e?e.start:def.start; $('seEnd').value=e?e.end:def.end;
+  fillTaskSel(e?e.taskId:''); $('seNotes').value=e?e.notes:''; $('seNew').value='';
+  ['seDate','seStart','seEnd','seTask','seNotes'].forEach(i=>$(i).disabled=locked);
+  const p=parts(nowMs()),past=e&&!locked&&(e.ymd<todayYmd()||(e.ymd===todayYmd()&&e.end<=p.hour+':'+p.minute));
+  $('seSave').hidden=locked; $('seDel').hidden=!e||locked; $('seReg').hidden=!past;
+  $('seInfo').textContent=locked?'This entry has been registered as worked time. Change it in Working Hours if needed.':past?'This time has passed. “Register as worked time” adds it to Working Hours.':'';
+  $('sch').showModal();
+}
+$('seTask').addEventListener('change',()=>{const n=$('seTask').value==='__new';$('seNewWrap').hidden=!n;if(n)$('seNew').focus()});
+$('seSave').addEventListener('click',async()=>{
+  const ymd=$('seDate').value,s=$('seStart').value,en=$('seEnd').value;
+  if(!ymd||!s||!en) return toast('Enter a date, a start time and an end time.','err');
+  if(mins(en)<=mins(s)) return toast('The end time must be after the start time.','err');
+  const btn=$('seSave'); btn.disabled=true;
+  try{
+    let task=$('seTask').value;
+    if(task==='__new'){const nm=$('seNew').value.trim(); if(!nm){toast('Enter a name for the new task.','err');btn.disabled=false;return} task=(await call('saveTask',{name:nm})).id}
+    toast(await call('saveScheduleEntry',{id:seId,email:schEmail(),ymd:ymd,start:s,end:en,taskId:task,notes:$('seNotes').value}),'ok');
+    $('sch').close(); if(SC.view==='day') SC.cur=ymd; loadSch();
+  }catch(err){toast(err.message,'err')}
+  btn.disabled=false;
+});
+$('seDel').addEventListener('click',async()=>{
+  if(!confirm('Delete this entry?')) return;
+  try{toast(await call('deleteScheduleEntry',{id:seId}),'ok'); $('sch').close(); loadSch()}catch(err){toast(err.message,'err')}
+});
+$('seReg').addEventListener('click',async()=>{
+  if(!confirm('Register this entry as worked time? It will appear in Working Hours.')) return;
+  try{toast(await call('scheduleToTime',{id:seId}),'ok'); $('sch').close(); loadSch(); refreshStatus(); loadTimeline(); if(reportLoaded) loadReport()}catch(err){toast(err.message,'err')}
+});
+$('seClose').addEventListener('click',()=>$('sch').close());
 
 /* ---- Cash closure ---- */
 // [label, kind, value in øre]  notes: 1000/500/200/100/50 kr  coins: 20/10/5/2/1 kr and 50 øre
@@ -983,7 +1177,7 @@ function fillEmployeeSelects(){
   const m=$('mEmp').value, f=$('fEmp').value;
   $('mEmp').innerHTML=opts; $('fEmp').innerHTML='<option value="all">All employees</option>'+opts;
   if(m) $('mEmp').value=m; if(f) $('fEmp').value=f;
-  $('bEmp').innerHTML=opts; $('hScope').innerHTML='<option value="all">All employees</option>'+opts;
+  $('bEmp').innerHTML=opts; $('sEmp').innerHTML=opts; $('hScope').innerHTML='<option value="all">All employees</option>'+opts;
 }
 async function refreshEmployees(){const d=await call('bootstrap'); employees=d.employees; fillEmployeeSelects()}
 async function loadEmployees(){
@@ -1030,7 +1224,7 @@ $('pSave').addEventListener('click',async()=>{
 });
 function signOut(){
   store.del('tr_token'); TOKEN=''; ME=null; reportLoaded=false; closeMenu();
-  $('app').hidden=true; if($('manual').open)$('manual').close(); ['bulk','hol'].forEach(id=>{if($(id).open)$(id).close()}); if($('pinDlg').open)$('pinDlg').close();
+  $('app').hidden=true; if($('manual').open)$('manual').close(); ['bulk','hol','sch'].forEach(id=>{if($(id).open)$(id).close()}); if($('pinDlg').open)$('pinDlg').close();
   $('login').hidden=false; $('lPin').value='';
 }
 $('outLink').addEventListener('click',signOut);
@@ -1049,14 +1243,14 @@ $('btnIn').addEventListener('click',()=>punch('Check In'));
 $('btnOut').addEventListener('click',()=>punch('Check Out'));
 $('openManual').addEventListener('click',()=>openManual(ME.email,todayYmd()));
 ['tab1','tab2','tab3'].forEach((id,i)=>$(id).addEventListener('click',()=>showTab(i+1)));
-$('tab5').addEventListener('click',()=>showTab(5));
+$('tab5').addEventListener('click',()=>showTab(5)); $('tab6').addEventListener('click',()=>showTab(6));
 
 async function enter(){
   const d=await call('bootstrap');
   ME=d.user; skew=d.nowMs-Date.now(); employees=d.employees||[];
   const ini=String(ME.name).trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase()||'?';
   $('avatar').textContent=ini; $('mName').textContent=ME.name; $('mRole').textContent=ME.admin?'Administrator':'Employee';
-  $('tab3').hidden=!ME.admin; $('tab4').hidden=!ME.admin; $('mEmpWrap').hidden=!ME.admin; $('fEmpWrap').hidden=!ME.admin; $('bEmpWrap').hidden=!ME.admin; $('openHol').hidden=!ME.admin;
+  $('tab3').hidden=!ME.admin; $('tab4').hidden=!ME.admin; $('mEmpWrap').hidden=!ME.admin; $('fEmpWrap').hidden=!ME.admin; $('bEmpWrap').hidden=!ME.admin; $('openHol').hidden=!ME.admin; $('sEmpWrap').hidden=!ME.admin;
   if(ME.admin) fillEmployeeSelects();
   $('login').hidden=true; $('app').hidden=false;
   showTab(1); tick(); if(!window._tk) window._tk=setInterval(tick,1000);
